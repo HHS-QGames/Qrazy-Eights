@@ -7,6 +7,33 @@
     <link rel="stylesheet" type="text/css" href="styles/main.css" />
 
     <title>Quantum Mau-Mau</title>
+    <script>
+      function drag(ev) {
+        cardType = ev.target.classList[1]
+        console.log("Picked up card")
+        console.log("Card Type: "+cardType)
+        ev.dataTransfer.setData("cardType", cardType)
+        if(cardType !== "measure") {
+          gateType = ev.target.children[2].innerText
+          console.log("Gate Type: "+gateType)
+          ev.dataTransfer.setData("gateType", gateType)
+        }
+      }
+      function allowDrop(ev) {
+        ev.preventDefault();
+      }
+      function drop(ev) {
+        ev.preventDefault();
+        var cardType = ev.dataTransfer.getData("cardType");
+        if (cardType === "measure") {
+          console.log("Measurement Card Dropped. Measuring circuit after turn")
+        } else {
+          qubitNumber = ev.target.id
+          gateType = ev.dataTransfer.getData("gateType")
+          console.log(cardType + " " + gateType + " dropped on " + qubitNumber)
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="game-screen-container">
@@ -41,57 +68,57 @@
       </div>
       <div class="player-hand">
         <div class="player-cards">
-          <div class="card measure">
+          <div class="card measure" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Measure</div>
             <img src="assets/measure.png" class="card-symbol" />
             <div class="card-description">End Round</div>
           </div>
-          <div class="card gate">
+          <div class="card gate" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Gate</div>
             <img src="assets/hadamard-gate.png" class="card-symbol" />
             <div class="card-description">Hadamard</div>
           </div>
-          <div class="card destroy">
+          <div class="card destroy" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Destroy</div>
             <img src="assets/hadamard-gate.png" class="card-symbol" />
             <div class="card-description">Hadamard</div>
           </div>
-          <div class="card gate">
+          <div class="card gate" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Gate</div>
             <img src="assets/cnot-gate.png" class="card-symbol" />
             <div class="card-description">CNOT</div>
           </div>
-          <div class="card destroy">
+          <div class="card destroy" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Destroy</div>
             <img src="assets/cnot-gate.png" class="card-symbol" />
             <div class="card-description">CNOT</div>
           </div>
-          <div class="card gate">
+          <div class="card gate" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Gate</div>
             <img src="assets/x-gate.png" class="card-symbol" />
             <div class="card-description">Pauli-X</div>
           </div>
-          <div class="card destroy">
+          <div class="card destroy" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Destroy</div>
             <img src="assets/x-gate.png" class="card-symbol" />
             <div class="card-description">Pauli-X</div>
           </div>
-          <div class="card gate">
+          <div class="card gate" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Gate</div>
             <img src="assets/y-gate.png" class="card-symbol" />
             <div class="card-description">Pauli-Y</div>
           </div>
-          <div class="card destroy">
+          <div class="card destroy" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Destroy</div>
             <img src="assets/y-gate.png" class="card-symbol" />
             <div class="card-description">Pauli-Y</div>
           </div>
-          <div class="card gate">
+          <div class="card gate" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Gate</div>
             <img src="assets/z-gate.png" class="card-symbol" />
             <div class="card-description">Pauli-Z</div>
           </div>
-          <div class="card destroy">
+          <div class="card destroy" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Destroy</div>
             <img src="assets/z-gate.png" class="card-symbol" />
             <div class="card-description">Pauli-Z</div>
@@ -103,10 +130,10 @@
       <div class="circuit">
         <img class="circuit-img" src="assets/circuit-all-gates.png">
           <div class="circuit-mask">
-            <div id="q0" class="qubit"></div>
-            <div id="q1" class="qubit"></div>
-            <div id="q2" class="qubit"></div>
-            <div id="q3" class="qubit"></div>
+            <div id="q0" class="qubit" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div id="q1" class="qubit" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div id="q2" class="qubit" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div id="q3" class="qubit" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
           </div>
         </img>
       </div>

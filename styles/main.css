@@ -142,7 +142,7 @@ body {
   left: 0px;
 }
 .qubit {
-  background-color: aqua;
+  /* background-color: aqua; */
   width: 100%;
   height: 15%;
   opacity: 40%;
