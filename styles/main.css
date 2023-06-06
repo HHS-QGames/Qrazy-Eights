@@ -12,7 +12,7 @@ body {
 }
 
 .draw-pile {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   min-width: fit-content;
 }
 .player-info {
@@ -32,7 +32,7 @@ body {
   display: flex;
   justify-content: start;
   align-items: start;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   gap: 10px;
   max-width: 100%;
   flex-wrap: nowrap;
@@ -52,7 +52,13 @@ body {
   flex-direction: column;
 }
 .destroy {
-  
+  background-color: #f78484;
+}
+.gate {
+  background-color: rgb(137, 231, 223);
+}
+.measure {
+  background-color: rgb(236, 225, 64);
 }
 .card-symbol {
   -webkit-user-drag: none;
