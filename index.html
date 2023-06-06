@@ -15,7 +15,30 @@
           <div>Draw Pile</div>
         </div>
       </div>
-      <div class="player-info">Player Info</div>
+      <div class="info-container">
+        <div class="scoreboard">
+          <b>Scoreboard</b>
+          <div class="player-info-container">
+            <div id="player1-info"  class="player-info">
+              <b>Player 1</b><br>
+              6 Cards
+            </div>
+            <div id="player2-info"  class="player-info current-turn">
+              <b>Player 2</b><br>
+              7 Cards
+            </div>
+            <div id="player3-info"  class="player-info">
+              <b>Player 3</b><br>
+              7 Cards
+            </div>
+            <div id="player4-info"  class="player-info">
+              <b>Bot 4</b><br>
+              7 Cards
+            </div>
+          </div>
+        </div>
+        <button class="restart-game-btn">Restart Game</button>
+      </div>
       <div class="player-hand">
         <div class="player-cards">
           <div class="card measure">
@@ -78,7 +101,7 @@
         <button>Confirm Turn</button>
       </div>
       <div class="circuit">
-        <img class="circuit-img" src="assets/circuit-example.png">
+        <img class="circuit-img" src="assets/circuit-all-gates.png">
           <div class="circuit-mask">
             <div id="q0" class="qubit"></div>
             <div id="q1" class="qubit"></div>

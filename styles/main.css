@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 .game-screen-container {
   display: grid;
@@ -15,15 +16,56 @@ body {
   /* border: 1px solid black; */
   min-width: fit-content;
 }
-.player-info {
+.info-container {
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  gap: 32px;
+}
+.scoreboard {
+  display: flex;
+  border: 1px solid 1px;
+  flex-grow: 2;
+  padding: 8px;
+  height: 100%;
   border: 1px solid black;
+  border-radius: 8px;
+  justify-content: space-evenly;
+  background-color: rgb(235, 222, 222);
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
 }
 
+.player-info-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.player-info {
+  background-color: #dae8fc;
+  border: #6c8ebf solid 1px;
+  padding: 2%;
+}
+
+.current-turn {
+  background-color: #d5e8d4;
+  border: #82b366 solid 1px;
+}
+.restart-game-btn {
+  height: 100%;
+}
 .player-hand {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   border: 1px solid black;
+  border-radius: 8px;
   grid-column: span 2;
   flex-wrap: wrap;
   flex-direction: column;
@@ -60,6 +102,10 @@ body {
 .measure {
   background-color: rgb(236, 225, 64);
 }
+.card-title {
+  font-weight: 700;
+  text-transform: uppercase;
+}
 .card-symbol {
   -webkit-user-drag: none;
   -khtml-user-drag: none;
@@ -71,6 +117,7 @@ body {
   grid-column: span 2;
   padding: 10px;
   position: relative;
+  border-radius: 8px;
   /* background-color: blue; */
 }
 
