@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+
+    <title>Quantum Mau-Mau</title>
+  </head>
+  <body>
+    <div class="game-screen-container">
+      <div class="draw-pile">
+        <div class="card card-in-pile">
+          <div>Draw Pile</div>
+        </div>
+      </div>
+      <div class="player-info">Player Info</div>
+      <div class="player-hand">
+        <div class="player-cards gate">
+          <div class="card">
+            <div class="card-title">Gate</div>
+            <img src="assets/hadamard-gate.png" class="card-symbol" />
+            <div class="card-description">Hadamard</div>
+          </div>
+          <div class="card destroy">
+            <div class="card-title">Destroy</div>
+            <img src="assets/hadamard-gate.png" class="card-symbol" />
+            <div class="card-description">Hadamard</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Measure</div>
+            <img src="assets/measure.png" class="card-symbol" />
+            <div class="card-description">End Round</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Gate</div>
+            <img src="assets/cnot-gate.png" class="card-symbol" />
+            <div class="card-description">CNOT</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Gate</div>
+            <img src="assets/hadamard-gate.png" class="card-symbol" />
+            <div class="card-description">Hadamard</div>
+          </div>
+          <div class="card destroy">
+            <div class="card-title">Destroy</div>
+            <img src="assets/hadamard-gate.png" class="card-symbol" />
+            <div class="card-description">Hadamard</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Measure</div>
+            <img src="assets/measure.png" class="card-symbol" />
+            <div class="card-description">End Round</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Gate</div>
+            <img src="assets/cnot-gate.png" class="card-symbol" />
+            <div class="card-description">CNOT</div>
+          </div>
+        </div>
+        <button>Confirm</button>
+      </div>
+      <div class="circuit">
+        <img class="circuit-img" src="assets/circuit-example.png">
+          <div class="circuit-mask">
+            <div id="q0" class="qubit"></div>
+            <div id="q1" class="qubit"></div>
+            <div id="q2" class="qubit"></div>
+            <div id="q3" class="qubit"></div>
+          </div>
+        </img>
+      </div>
+    </div>
+  </body>
+</html>
