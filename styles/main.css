@@ -70,7 +70,7 @@ body {
   flex-wrap: wrap;
   flex-direction: column;
 }
-.player-cards {
+#player-cards {
   display: flex;
   justify-content: start;
   align-items: start;

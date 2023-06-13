@@ -7,6 +7,9 @@
     <link rel="stylesheet" type="text/css" href="styles/main.css" />
 
     <title>Quantum Mau-Mau</title>
+    <script type="module" src="src\components\Card.js"></script>
+    <script type="module" src="src\components\QuantumOperationCard.js"></script>
+    <script type="module" src="src\util\AssetFinder.js"></script>
     <script>
       function drag(ev) {
         cardType = ev.target.classList[1]
@@ -33,6 +36,15 @@
           console.log(cardType + " " + gateType + " dropped on " + qubitNumber)
         }
       }
+
+
+    </script>
+    <script type="module">
+      // import QuantumOperationCard from "./src/components/QuantumOperationCard.js";
+      // var card = new QuantumOperationCard("hadamard", null)
+      // console.log(card.getHTML())
+      // document.getElementById("player-cards").innerHTML = document.getElementById("player-cards").innerHTML + card.getHTML()
+      // import Hand
     </script>
   </head>
   <body>
@@ -67,7 +79,7 @@
         <button class="restart-game-btn">Restart Game</button>
       </div>
       <div class="player-hand">
-        <div class="player-cards">
+        <div id="player-cards">
           <div class="card measure" draggable="true" ondragstart="drag(event)">
             <div class="card-title">Measure</div>
             <img src="assets/measure.png" class="card-symbol" />

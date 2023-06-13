@@ -25,4 +25,11 @@ class Hand {
       this.cards.splice(index, 1);
     }
   }
+  render() {
+    var cardsHTML = ""
+    this.cards.forEach(card => {
+      cardsHTML += card.getHTML()
+    });
+    document.getElementById("player-cards").innerHTML = cardsHTML
+  }
 }
