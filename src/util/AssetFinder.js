@@ -4,11 +4,11 @@ export default function getGateIconPath(gateType) {
       return 'assets\\hadamard-gate.png'
     case "cnot":
       return 'assets\\cnot-gate.png'
-    case "x":
+    case "pauli-x":
       return 'assets\\x-gate.png'
-    case "y":
+    case "pauli-y":
       return 'assets\\y-gate.png'
-    case "z":
+    case "pauli-z":
       return 'assets\\z-gate.png'
     default:
       return ''

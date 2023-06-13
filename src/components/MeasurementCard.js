@@ -2,9 +2,14 @@
 /**
  * MeasurementCard is a class that represents a measurement card.
  */
-class MeasurementCard extends Card {
-  constructor(cardData, measurementData, api) {
-    super(cardData); // Initialize with parent class constructor
+import Card from "./Card.js";
+
+export default class MeasurementCard extends Card {
+  constructor(measurementData, api) {
+    super({
+      type: "measurement",
+      gateIconPath: 'assets\\measure.png'
+    }); // Initialize with parent class constructor
     this.measurementData = measurementData; // Data for the measurement
     this.api = api; // Quantum computer API for measurement
   }
@@ -16,5 +21,9 @@ class MeasurementCard extends Card {
    */
   measureCircuit(circuit) {
     return this.api.executeCircuit(circuit);
+  }
+
+  getHTML() {
+    return '<div class="card measure" draggable="true" ondragstart="drag(event)"><div class="card-title">Measure</div><img src="assets/measure.png" class="card-symbol" /><div class="card-description">End Round</div></div>'
   }
 }

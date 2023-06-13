@@ -6,9 +6,7 @@ import getGateIconPath from "../util/AssetFinder.js"
 import Card from "./Card.js";
 export default class QuantumOperationCard extends Card {
 
-  constructor(gateType, operationData) {
-    console.log(gateType)
-    
+  constructor(gateType, operationData) {    
     super({
       type: "gate",
       gateType: gateType,
