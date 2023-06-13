@@ -13,17 +13,17 @@ const main = () => {
     
     // Create cards and deck
     const cards = [
-      new QuantumOperationCard(gateType = "hadamard"), 
-      new QuantumOperationCard(gateType = "cnot"), 
-      new QuantumOperationCard(gateType = "pauli-x"), 
-      new QuantumOperationCard(gateType = "pauli-y"), 
-      new QuantumOperationCard(gateType = "pauli-z"), 
+      new QuantumOperationCard("hadamard"), 
+      new QuantumOperationCard("cnot"), 
+      new QuantumOperationCard("pauli-x"), 
+      new QuantumOperationCard("pauli-y"), 
+      new QuantumOperationCard("pauli-z"), 
       new MeasurementCard(),
-      new QuantumDestroyOperationCard(gateType = "hadamard"), 
-      new QuantumDestroyOperationCard(gateType = "cnot"), 
-      new QuantumDestroyOperationCard(gateType = "pauli-x"), 
-      new QuantumDestroyOperationCard(gateType = "pauli-y"), 
-      new QuantumDestroyOperationCard(gateType = "pauli-z"), 
+      new QuantumDestroyOperationCard("hadamard"), 
+      new QuantumDestroyOperationCard("cnot"), 
+      new QuantumDestroyOperationCard("pauli-x"), 
+      new QuantumDestroyOperationCard("pauli-y"), 
+      new QuantumDestroyOperationCard("pauli-z"), 
     ];  // fill in your own card data
     const deck = new Deck(cards);
     
