@@ -9,6 +9,9 @@
     <title>Quantum Mau-Mau</title>
     <script type="module" src="src\components\Card.js"></script>
     <script type="module" src="src\components\QuantumOperationCard.js"></script>
+    <script type="module" src="src\components\QuantumDestroyOperationCard.js"></script>
+    <script type="module" src="src\components\MeasurementCard.js"></script>
+    <script type="module" src="src\components\Hand.js"></script>
     <script type="module" src="src\util\AssetFinder.js"></script>
     <script>
       function drag(ev) {
@@ -45,6 +48,26 @@
       // console.log(card.getHTML())
       // document.getElementById("player-cards").innerHTML = document.getElementById("player-cards").innerHTML + card.getHTML()
       // import Hand
+      import Hand from "./src/components/Hand.js"
+      import QuantumOperationCard from "./src/components/QuantumOperationCard.js"
+      import QuantumDestroyOperationCard from "./src/components/QuantumDestroyOperationCard.js"
+      import MeasurementCard from "./src/components/MeasurementCard.js"
+      
+      const cards = [
+        new QuantumOperationCard("hadamard"), 
+        new QuantumDestroyOperationCard("cnot"), 
+        new QuantumOperationCard("cnot"), 
+        new QuantumOperationCard("pauli-x"), 
+        new QuantumOperationCard("pauli-y"), 
+        new QuantumOperationCard("pauli-z"), 
+        new QuantumDestroyOperationCard("pauli-y"), 
+        new MeasurementCard(),
+        new QuantumDestroyOperationCard("hadamard"), 
+        new QuantumDestroyOperationCard("pauli-x"), 
+        new QuantumDestroyOperationCard("pauli-z"), 
+      ]; 
+      var hand = new Hand(cards)
+      hand.render()
     </script>
   </head>
   <body>

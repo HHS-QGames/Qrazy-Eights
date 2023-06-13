@@ -2,7 +2,7 @@
 /**
  * Hand is a class that represents a player's hand of cards.
  */
-class Hand {
+export default class Hand {
   constructor(cards) {
     this.cards = cards; // Cards in the player's hand
   }
@@ -26,6 +26,7 @@ class Hand {
     }
   }
   render() {
+    console.log("Render Hand")
     var cardsHTML = ""
     this.cards.forEach(card => {
       cardsHTML += card.getHTML()
