@@ -1,17 +1,15 @@
-// Gate.js
 /**
  * Gate is a class that represents a quantum gate.
  */
-class Gate {
-  constructor(gateType) {
-    this.gateType = gateType; // Type of the quantum gate (e.g., "Hadamard", "Pauli-X", "CNOT")
-  }
-
+export default class Gate {
   /**
-   * Applies the gate to a given qubit.
-   * @param {Object} qubit - The qubit to apply the gate to.
+   * Constructs a new Gate instance.
+   * @param {string} gateType - The type of the quantum gate (e.g., "hadamard", "pauli-x", "pauli-y", "pauli-z", "cnot", "measure").
    */
-  applyToQubit(qubit) {
-    qubit.setState(this.gateType); // In a real scenario, this should apply the transformation corresponding to the gate
+  constructor(gateType) {
+    this.gateType = gateType;
+    this.slotnumber = null;
+    this.varient = null;
+    this.flipped = false;
   }
 }

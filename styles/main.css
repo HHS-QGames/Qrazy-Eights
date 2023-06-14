@@ -112,38 +112,40 @@ body {
   -moz-user-drag: none;
   -o-user-drag: none;
 }
-.circuit {
-  border: 1px solid black;
-  grid-column: span 2;
-  padding: 10px;
-  position: relative;
-  border-radius: 8px;
-  /* background-color: blue; */
-}
 
-.circuit-img {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  object-fit: fill;
-  overflow: hidden;
-}
 
-.circuit-mask {
+#circuit-container {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  gap: 2%;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  /* background-color: aqua; */
-  left: 0px;
+  border: solid 1px black;
+  border-radius: 8px;
+  grid-column: span 2;
+  padding-left: 8px;
+  padding-right: 8px;
 }
-.qubit {
-  /* background-color: aqua; */
+.qubit-row {
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 15%;
-  opacity: 40%;
+  height: 40px;
+  gap: 10px;
 }
+.qubit-row-line {
+  flex-grow: 1;
+}
+
+
+
+/* #q0 {
+  background-color: #82b366;
+}
+#q1 {
+  background-color: aqua;
+}
+#q2 {
+  background-color:  blanchedalmond;
+}
+#q3 {
+  background-color: rebeccapurple;
+} */

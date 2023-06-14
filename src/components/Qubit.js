@@ -1,17 +1,78 @@
-// Qubit.js
 /**
  * Qubit is a class that represents a quantum bit.
  */
-class Qubit {
-  constructor(state = "|0⟩") {
-    this.state = state; // Initialize the qubit to the ground state
+import getGateIconPath from '../util/AssetFinder.js';
+
+export default class Qubit {
+  /**
+   * Constructs a new Qubit instance.
+   * @param {number} index - The index of the qubit.
+   */
+  constructor(index) {
+    this.index = index;
+    this.appliedGates = [];
   }
 
   /**
-   * Sets the state of the qubit.
-   * @param {string} state - The state to set the qubit to.
+   * Adds a gate to the qubit.
+   * @param {Object} gate - The gate to add.
+   * @param {number} slotnumber - The slot number for the gate.
    */
-  setState(state) {
-    this.state = state;
+  addGate(gate, slotnumber) {
+    gate.slotnumber = slotnumber;
+    this.appliedGates.push(gate);
+  }
+
+  /**
+   * Generates the HTML representation of the qubit.
+   * @param {number} offset - The offset for gate positioning.
+   * @param {number} distance - The distance between gates.
+   * @returns {string} The HTML code for the qubit.
+   */
+  getHTML(offset, distance) {
+    let gatesHTML = "";
+    this.appliedGates.forEach(gate => {
+      switch (gate.gateType) {
+        case "hadamard":
+        case "pauli-x":
+        case "pauli-y":
+        case "pauli-z":
+        case "measure":
+          gatesHTML += `<image class="image" xlink:href="${getGateIconPath(gate.gateType)}" x="${offset + (distance * gate.slotnumber)}" y="-12" width="2" height="25" />`;
+          break;
+        case "cnot":
+          switch (gate.varient) {
+            case "not":
+              if (gate.flipped) {
+                gatesHTML += `<image class="image" xlink:href="${getGateIconPath("cnot-not-flipped")}" x="${offset + (distance * gate.slotnumber)}" y="-10.3" width="2" height="25" />`;
+              } else {
+                gatesHTML += `<image class="image" xlink:href="${getGateIconPath("cnot-not")}" x="${offset + (distance * gate.slotnumber)}" y="-11.2" width="2" height="20" />`;
+              }
+              break;
+            case "middle":
+              gatesHTML += `<image class="image" xlink:href="${getGateIconPath("cnot-middle")}" x="${offset + (distance * gate.slotnumber)}" y="-12" width="2" height="25" />`;
+              break;
+            case "control":
+              if (gate.flipped) {
+                gatesHTML += `<image class="image" xlink:href="${getGateIconPath("cnot-c-flipped")}" x="${offset + (distance * gate.slotnumber)}" y="-13.9" width="2" height="25" />`;
+              } else {
+                gatesHTML += `<image class="image" xlink:href="${getGateIconPath("cnot-c")}" x="${offset + (distance * gate.slotnumber)}" y="-7.5" width="2" height="20" />`;
+              }
+              break;
+          }
+          break;
+      }
+    });
+
+    const qubitHTML = `
+    <div id="q${this.index}" class="qubit-row">
+      <div>q[${this.index}]</div>
+      <svg class="qubit-row-line" xmlns="http://www.w3.org/2000/svg" height="150%" viewBox="0 0 100 1">
+        <line x1="0" y1="0.5" x2="100" y2="0.5" stroke="black" stroke-width="0.05"/>
+        ${gatesHTML}
+      </svg>
+    </div>`;
+
+    return qubitHTML;
   }
 }
