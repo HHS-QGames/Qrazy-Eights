@@ -23,6 +23,12 @@ export default class Gate {
         return `Y q[${qubitIndex}]`
       case "pauli-z":
         return `Z q[${qubitIndex}]`
+      case "prep-x":
+        return `PREP_X q[${qubitIndex}]`
+      case "prep-y":
+        return `PREP_Y q[${qubitIndex}]`
+      case "prep-z":
+        return `PREP_Z q[${qubitIndex}]`
       case "measure":
         return `MEASURE_ALL`
       case "cnot":

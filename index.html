@@ -9,7 +9,10 @@
     <title>Quantum Mau-Mau</title>
     <script type="module" src="src\components\Card.js"></script>
     <script type="module" src="src\components\QuantumOperationCard.js"></script>
-    <script type="module" src="src\components\QuantumDestroyOperationCard.js"></script>
+    <script
+      type="module"
+      src="src\components\QuantumDestroyOperationCard.js"
+    ></script>
     <script type="module" src="src\components\MeasurementCard.js"></script>
     <script type="module" src="src\components\Hand.js"></script>
     <script type="module" src="src\components\Qubit.js"></script>
@@ -18,27 +21,31 @@
     <script type="module" src="src\util\AssetFinder.js"></script>
     <script type="module" src="src\main.js"></script>
     <script type="module">
-      import {main, game} from "./src/main.js"
-      main()
+      import { main, game } from "./src/main.js";
+      main();
 
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function () {
         const confirmTurnBtn = document.getElementById("confirm-turn-btn");
-        
-        confirmTurnBtn.addEventListener("click", function() {
-          console.log(game)
-          game.nextTurn()
-        })
+
+        confirmTurnBtn.addEventListener("click", function () {
+          console.log(game);
+          game.nextTurn();
+        });
         const restartGameBtn = document.getElementById("restart-game-btn");
-        restartGameBtn.addEventListener("click", function() {
-          console.log("Restarting game")
-          main()
-        })
-      })
+        restartGameBtn.addEventListener("click", function () {
+          console.log("Restarting game");
+          main();
+        });
+        const drawPileBtn = document.getElementById("draw-pile");
+        drawPileBtn.addEventListener("click", function () {
+          game.currentPlayer.drawCard()
+        });
+      });
     </script>
   </head>
   <body>
     <div class="game-screen-container">
-      <div class="draw-pile">
+      <div id="draw-pile">
         <div class="card card-in-pile">
           <div>Draw Pile</div>
         </div>
@@ -46,124 +53,16 @@
       <div class="info-container">
         <div class="scoreboard">
           <b>Scoreboard</b>
-          <div id="player-info-container">
-            <div id="player1-info"  class="player-info">
-              <b>Player 1</b><br>
-              6 Cards
-            </div>
-            <div id="player2-info"  class="player-info current-turn">
-              <b>Player 2</b><br>
-              7 Cards
-            </div>
-            <div id="player3-info"  class="player-info">
-              <b>Player 3</b><br>
-              7 Cards
-            </div>
-            <div id="player4-info"  class="player-info">
-              <b>Bot 4</b><br>
-              7 Cards
-            </div>
-          </div>
+          <div id="player-info-container"></div>
         </div>
         <button id="restart-game-btn">Restart Game</button>
       </div>
       <div class="player-hand">
-        <div id="player-cards">
-          <div class="card measure" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Measure</div>
-            <img src="assets/measure.png" class="card-symbol" />
-            <div class="card-description">End Round</div>
-          </div>
-          <div class="card gate" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Gate</div>
-            <img src="assets/hadamard-gate.png" class="card-symbol" />
-            <div class="card-description">Hadamard</div>
-          </div>
-          <div class="card destroy" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Destroy</div>
-            <img src="assets/hadamard-gate.png" class="card-symbol" />
-            <div class="card-description">Hadamard</div>
-          </div>
-          <div class="card gate" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Gate</div>
-            <img src="assets/cnot-gate.png" class="card-symbol" />
-            <div class="card-description">CNOT</div>
-          </div>
-          <div class="card destroy" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Destroy</div>
-            <img src="assets/cnot-gate.png" class="card-symbol" />
-            <div class="card-description">CNOT</div>
-          </div>
-          <div class="card gate" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Gate</div>
-            <img src="assets/x-gate.png" class="card-symbol" />
-            <div class="card-description">Pauli-X</div>
-          </div>
-          <div class="card destroy" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Destroy</div>
-            <img src="assets/x-gate.png" class="card-symbol" />
-            <div class="card-description">Pauli-X</div>
-          </div>
-          <div class="card gate" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Gate</div>
-            <img src="assets/y-gate.png" class="card-symbol" />
-            <div class="card-description">Pauli-Y</div>
-          </div>
-          <div class="card destroy" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Destroy</div>
-            <img src="assets/y-gate.png" class="card-symbol" />
-            <div class="card-description">Pauli-Y</div>
-          </div>
-          <div class="card gate" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Gate</div>
-            <img src="assets/z-gate.png" class="card-symbol" />
-            <div class="card-description">Pauli-Z</div>
-          </div>
-          <div class="card destroy" draggable="true" ondragstart="drag(event)">
-            <div class="card-title">Destroy</div>
-            <img src="assets/z-gate.png" class="card-symbol" />
-            <div class="card-description">Pauli-Z</div>
-          </div>
-
-        </div>
-        <button id="confirm-turn-btn">Confirm Turn</button>
+        <div id="player-cards"></div>
+        <button id="confirm-turn-btn">Next Turn</button>
       </div>
 
-      <div id="circuit-container">
-        <div id="q0" class="qubit-row">
-          <div>q[0]</div>
-          <svg class="qubit-row-line" xmlns="http://www.w3.org/2000/svg" height="150%" viewBox="0 0 100 1">
-            <line x1="0" y1="0.5" x2="100" y2="0.5" stroke="black" stroke-width="0.05"/>
-            <image class="image" xlink:href="assets/x-gate.png" x="12.5" y="-12" width="2" height="25" />
-          </svg>
-        </div>
-        <div id="q1" class="qubit-row">
-          <div>q[1]</div>
-          <svg class="qubit-row-line" xmlns="http://www.w3.org/2000/svg" height="150%" viewBox="0 0 100 1">
-            <line x1="0" y1="0.5" x2="100" y2="0.5" stroke="black" stroke-width="0.05"/>
-            <image class="image" xlink:href="assets/z-gate.png" x="0.5" y="-12" width="2" height="25" />
-            <image class="image" xlink:href="assets/hadamard-gate.png" x="6.5" y="-12" width="2" height="25" />
-            <image class="image" xlink:href="assets/cnot-c.png" x="9.5" y="-7.5" width="2" height="20" />
-          </svg>
-        </div>
-        <div id="q2" class="qubit-row">
-          <div>q[2]</div>
-          <svg class="qubit-row-line" xmlns="http://www.w3.org/2000/svg" height="150%" viewBox="0 0 100 1">
-            <line x1="0" y1="0.5" x2="100" y2="0.5" stroke="black" stroke-width="0.05"/>
-            <image class="image" xlink:href="assets/y-gate.png" x="3.5" y="-12" width="2" height="25" />
-            <image class="image" xlink:href="assets/cnot-middle.png" x="9.5" y="-12" width="2" height="25" />
-            <image class="image" xlink:href="assets/cnot-not-flipped.png" x="15.5" y="-10.3" width="2" height="25" />
-          </svg>
-        </div>
-        <div id="q3" class="qubit-row">
-          <div>q[3]</div>
-          <svg class="qubit-row-line" xmlns="http://www.w3.org/2000/svg" height="150%" viewBox="0 0 100 1">
-            <line x1="0" y1="0.5" x2="100" y2="0.5" stroke="black" stroke-width="0.05"/>
-            <image class="image" xlink:href="assets/cnot-not.png" x="9.5" y="-13.7" width="2" height="25" />
-            <image class="image" xlink:href="assets/cnot-c-flipped.png" x="15.5" y="-13.9" width="2" height="25" />
-          </svg>
-        </div>
-      </div>
+      <div id="circuit-container"></div>
     </div>
   </body>
 </html>

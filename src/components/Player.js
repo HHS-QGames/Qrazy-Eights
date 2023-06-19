@@ -23,6 +23,8 @@ export default class Player {
     if (card) {
       this.hand.addCard(card);
     }
+    this.hand.render()
+    this.game.scoreboard.render()
   }
 
   drawCards(amount, maxOneMeasure = false) {

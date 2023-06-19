@@ -58,6 +58,9 @@ export default class Qubit {
         case "pauli-x":
         case "pauli-y":
         case "pauli-z":
+        case "prep-x":
+        case "prep-y":
+        case "prep-z":
           gatesHTML += `<image class="image" slotnumber="${gate.slotnumber}" gateType="${gate.gateType}" xlink:href="${getGateIconPath(gate.gateType)}" x="${offset + (distance * gate.slotnumber)}" y="-12" width="2" height="25" />`;
           break;
         case "measure":

@@ -12,7 +12,7 @@ body {
   padding: 1vh;
 }
 
-.draw-pile {
+#draw-pile {
   /* border: 1px solid black; */
   min-width: fit-content;
 }
