@@ -25,6 +25,8 @@ export default class Gate {
         return `Z q[${qubitIndex}]`
       case "measure":
         return `MEASURE_ALL`
+      case "cnot":
+        return `CNOT q[${this.control}], q[${this.not}]`
     }
   }
 }

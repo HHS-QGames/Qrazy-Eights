@@ -10,7 +10,7 @@ import GameSettings from "./components/Gamesettings.js";
 import Qubit from "./components/Qubit.js";
 import Deck from "./components/Deck.js";
 import { main } from "./main.js";
-import { execute } from "./util/QuantumAPI.js"
+import { execute } from "./util/QuantumAPI.js";
 
 export default class Game {
   // constructor(players, circuit, drawPile, discardPile) {
@@ -63,7 +63,12 @@ export default class Game {
         this.players.length *
         gameSettings.totalCardMultiplier
     );
-    // this.drawPile.addCards({cardType: "gate", gateType: "cnot"}, gameSettings.hadamardCountPP * this.players.length * gameSettings.totalCardMultiplier)
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "cnot" },
+      gameSettings.hadamardCountPP *
+        this.players.length *
+        gameSettings.totalCardMultiplier
+    );
     this.drawPile.addCards(
       { cardType: "destroy", gateType: "hadamard" },
       gameSettings.hadamardCountPP *
@@ -119,6 +124,7 @@ export default class Game {
    * Advances the game to the next turn.
    */
   async nextTurn() {
+    console.log(this.circuit.to_cQASM())
     if (this.isGameOver()) {
       alert(`${this.currentPlayer.name} heeft gewonnen!`);
       main();
@@ -129,11 +135,15 @@ export default class Game {
       // console.log(this.circuit)
       // console.log(this.circuit.to_cQASM())
       // const measurementValue = Math.floor(Math.random() * 17); // Binary value of the qubits 0 1 0 0
-      const results = await execute(this.circuit.to_cQASM())
+      const results = await execute(this.circuit.to_cQASM());
       const measurementValue = this.findMostFrequentNumber(results); // Binary value of the qubits 0 1 0 0
-      console.log(measurementValue)
+      var binaryResult = measurementValue.toString(2)
+      while (binaryResult.length < 4) {
+        binaryResult = "0" + binaryResult;
+      }
+      console.log(measurementValue);
       alert(
-        `The result of the measurement is ${measurementValue}!\n${
+        `The result of the measurement is ${measurementValue}! (binary: ${binaryResult})\n${
           measurementValue === 0
             ? `Nobody needs to draw a card.`
             : `Everybody except for ${this.currentPlayer.name} gets to draw ${measurementValue} cards.`
@@ -150,7 +160,7 @@ export default class Game {
     const currentPlayerIndex = this.players.indexOf(this.currentPlayer);
     this.currentPlayer =
       this.players[(currentPlayerIndex + 1) % this.players.length];
-    this.currentPlayer.isCurrentTurn = true;
+    this.currentPlayer.giveTurn();
     console.log(
       `Current turn player ${(currentPlayerIndex + 2) % this.players.length}: ${
         this.currentPlayer.name
@@ -160,12 +170,14 @@ export default class Game {
   }
   findMostFrequentNumber(numbers) {
     const frequency = {};
-  
+
     numbers.forEach((num) => {
       frequency[num] = (frequency[num] || 0) + 1;
     });
-  
-    return +Object.keys(frequency).reduce((a, b) => frequency[a] > frequency[b] ? a : b);
+
+    return +Object.keys(frequency).reduce((a, b) =>
+      frequency[a] > frequency[b] ? a : b
+    );
   }
   /**
    * Checks if the game is over.
