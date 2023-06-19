@@ -2,7 +2,7 @@
 /**
  * Hand is a class that represents a player's hand of cards.
  */
-class Hand {
+export default class Hand {
   constructor(cards) {
     this.cards = cards; // Cards in the player's hand
   }
@@ -24,5 +24,27 @@ class Hand {
     if (index > -1) {
       this.cards.splice(index, 1);
     }
+  }
+  render() {
+    console.log("Render Hand")
+    var cardsHTML = ""
+    this.cards.forEach(card => {
+      cardsHTML += card.getHTML()
+    });
+    document.getElementById("player-cards").innerHTML = cardsHTML
+    // Add event listeners
+    const cards = document.getElementsByClassName("card");
+    for (const card of cards) {
+      card.addEventListener("dragstart", drag);
+    }
+  }
+  
+}
+function drag(ev) {
+  var cardType = ev.target.classList[1]
+  ev.dataTransfer.setData("cardType", cardType)
+  if(cardType !== "measure") {
+    var gateType = ev.target.children[2].innerText
+    ev.dataTransfer.setData("gateType", gateType)
   }
 }

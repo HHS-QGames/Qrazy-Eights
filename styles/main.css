@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 .game-screen-container {
   display: grid;
@@ -12,27 +13,68 @@ body {
 }
 
 .draw-pile {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   min-width: fit-content;
 }
-.player-info {
+.info-container {
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  gap: 32px;
+}
+.scoreboard {
+  display: flex;
+  border: 1px solid 1px;
+  flex-grow: 2;
+  padding: 8px;
+  height: 100%;
   border: 1px solid black;
+  border-radius: 8px;
+  justify-content: space-evenly;
+  background-color: rgb(235, 222, 222);
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
 }
 
+.player-info-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.player-info {
+  background-color: #dae8fc;
+  border: #6c8ebf solid 1px;
+  padding: 2%;
+}
+
+.current-turn {
+  background-color: #d5e8d4;
+  border: #82b366 solid 1px;
+}
+.restart-game-btn {
+  height: 100%;
+}
 .player-hand {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   border: 1px solid black;
+  border-radius: 8px;
   grid-column: span 2;
   flex-wrap: wrap;
   flex-direction: column;
 }
-.player-cards {
+#player-cards {
   display: flex;
   justify-content: start;
   align-items: start;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   gap: 10px;
   max-width: 100%;
   flex-wrap: nowrap;
@@ -52,7 +94,17 @@ body {
   flex-direction: column;
 }
 .destroy {
-  
+  background-color: #f78484;
+}
+.gate {
+  background-color: rgb(137, 231, 223);
+}
+.measure {
+  background-color: rgb(236, 225, 64);
+}
+.card-title {
+  font-weight: 700;
+  text-transform: uppercase;
 }
 .card-symbol {
   -webkit-user-drag: none;
@@ -60,37 +112,40 @@ body {
   -moz-user-drag: none;
   -o-user-drag: none;
 }
-.circuit {
-  border: 1px solid black;
-  grid-column: span 2;
-  padding: 10px;
-  position: relative;
-  /* background-color: blue; */
-}
 
-.circuit-img {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  object-fit: fill;
-  overflow: hidden;
-}
 
-.circuit-mask {
+#circuit-container {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  gap: 2%;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  /* background-color: aqua; */
-  left: 0px;
+  border: solid 1px black;
+  border-radius: 8px;
+  grid-column: span 2;
+  padding-left: 8px;
+  padding-right: 8px;
 }
-.qubit {
+.qubit-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  gap: 10px;
+}
+.qubit-row-line {
+  flex-grow: 1;
+}
+
+
+
+/* #q0 {
+  background-color: #82b366;
+}
+#q1 {
   background-color: aqua;
-  width: 100%;
-  height: 15%;
-  opacity: 40%;
 }
+#q2 {
+  background-color:  blanchedalmond;
+}
+#q3 {
+  background-color: rebeccapurple;
+} */

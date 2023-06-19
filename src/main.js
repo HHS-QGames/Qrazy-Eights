@@ -3,13 +3,28 @@
  * The entry point of the application.
  * This function creates objects, links them together, and starts the game.
  */
+import QuantumOperationCard from "./components/QuantumOperationCard";
+import QuantumDestroyOperationCard from "./components/QuantumDestroyOperationCard";
+import MeasurementCard from "./components/MeasurementCard";
 const main = () => {
     // Create players
     const player1 = new Player("Alice");
     const player2 = new Player("Bob");
     
     // Create cards and deck
-    const cards = [new QuantumOperationCard(...), new MeasurementCard(...), ...];  // fill in your own card data
+    const cards = [
+      new QuantumOperationCard("hadamard"), 
+      new QuantumOperationCard("cnot"), 
+      new QuantumOperationCard("pauli-x"), 
+      new QuantumOperationCard("pauli-y"), 
+      new QuantumOperationCard("pauli-z"), 
+      new MeasurementCard(),
+      new QuantumDestroyOperationCard("hadamard"), 
+      new QuantumDestroyOperationCard("cnot"), 
+      new QuantumDestroyOperationCard("pauli-x"), 
+      new QuantumDestroyOperationCard("pauli-y"), 
+      new QuantumDestroyOperationCard("pauli-z"), 
+    ];  // fill in your own card data
     const deck = new Deck(cards);
     
     // Create discard pile

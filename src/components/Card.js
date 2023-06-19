@@ -1,5 +1,6 @@
-class Card {
-    constructor(cardData) {
-      this.cardData = cardData;
-    }
+export default class Card {
+  constructor(cardData) {
+    this.cardData = cardData;
   }
+}
+
