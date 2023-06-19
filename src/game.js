@@ -150,7 +150,7 @@ export default class Game {
     const currentPlayerIndex = this.players.indexOf(this.currentPlayer);
     this.currentPlayer =
       this.players[(currentPlayerIndex + 1) % this.players.length];
-    this.currentPlayer.isCurrentTurn = true;
+    this.currentPlayer.giveTurn()
     console.log(
       `Current turn player ${(currentPlayerIndex + 2) % this.players.length}: ${
         this.currentPlayer.name

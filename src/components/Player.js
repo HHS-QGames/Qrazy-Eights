@@ -9,7 +9,10 @@ export default class Player {
     this.name = name; // Player's name
     this.game = game; // Game the player is participating in
     this.hand = new Hand([]); // Player's hand of cards
-    this.isCurrentTurn = false
+    this.isCurrentTurn = false;
+    this.playedGate = false;
+    this.playedDestroy = false;
+    this.playedMeasure = false;
   }
 
   /**
@@ -23,7 +26,7 @@ export default class Player {
   }
 
   drawCards(amount, maxOneMeasure = false) {
-    this.game.drawPile.drawCards(amount, this, maxOneMeasure)
+    this.game.drawPile.drawCards(amount, this, maxOneMeasure);
   }
 
   /**
@@ -40,39 +43,78 @@ export default class Player {
       throw new Error("Invalid card index");
     }
 
-    let result = null;
     var succesfullAction = false;
     if (card instanceof QuantumOperationCard) {
-      if (card.gateType === "cnot") {
-        console.log("WIP: CNOT");
-      } else {
-        succesfullAction = this.game.circuit.applyGate(
-          new Gate(card.cardData.gateType),
-          qubitIndex
+      if (this.playedDestroy || this.playedGate || this.playedMeasure) {
+        alert(
+          `You already played a ${
+            this.playedMeasure
+              ? "measure"
+              : this.playedDestroy
+              ? "destroy"
+              : "gate"
+          } card!\n\nEach turn you are able to play a gate or destroy card and a single measure card at the end of your turn.`
         );
+      } else {
+        if (card.gateType === "cnot") {
+          console.log("WIP: CNOT");
+        } else {
+          succesfullAction = this.game.circuit.applyGate(
+            new Gate(card.cardData.gateType),
+            qubitIndex
+          );
+          this.playedGate = true;
+        }
       }
     } else if (card instanceof QuantumDestroyOperationCard) {
-      succesfullAction = this.game.circuit.destroyGate(
-        card.cardData.gateType,
-        qubitIndex,
-        targetSlotnumber
-      );
+      if (this.playedDestroy || this.playedGate || this.playedMeasure) {
+        alert(
+          `You already played a ${
+            this.playedMeasure
+              ? "measure"
+              : this.playedDestroy
+              ? "destroy"
+              : "gate"
+          } card!\n\nEach turn you are able to play a gate or destroy card and a single measure card at the end of your turn.`
+        );
+      } else {
+        succesfullAction = this.game.circuit.destroyGate(
+          card.cardData.gateType,
+          qubitIndex,
+          targetSlotnumber
+        );
+        this.playedDestroy = true;
+      }
     } else if (card instanceof MeasurementCard) {
-      succesfullAction = card.measureCircuit(circuit);
+      if (this.playedMeasure) {
+        alert(
+          "You already played a measure card!\n\nEach turn you are able to play a gate or destroy card and a single measure card at the end of your turn."
+        );
+      } else {
+        succesfullAction = card.measureCircuit(circuit);
+        this.playedMeasure = true;
+      }
     }
     if (succesfullAction) {
       console.log("Action is succesfull");
       this.hand.removeCard(card);
       this.game.discardPile.addCard(card);
       this.hand.render();
-      this.game.scoreboard.render()
+      this.game.scoreboard.render();
     }
   }
-
+  giveTurn() {
+    this.isCurrentTurn = true;
+    this.playedGate = false;
+    this.playedDestroy = false;
+    this.playedMeasure = false;
+  }
   getHTML() {
-    return `<div class="player-info${this.isCurrentTurn ? " current-turn" : ""}">
+    return `<div class="player-info${
+      this.isCurrentTurn ? " current-turn" : ""
+    }">
     <b>${this.name}</b><br>
     ${this.hand.cards.length} Cards
-  </div>`
+  </div>`;
   }
 }

@@ -8,8 +8,8 @@ export default class GameSettings {
     zCountPP = 3,
     cnotCountPP = 3,
     measureCountPP = 2,
-    destroyPerGateCount = 0.5,
-    totalCardMultiplier = 5
+    destroyPerGateCount = 0.2,
+    totalCardMultiplier = 15
   ) {
     this.qubitCount = qubitCount;
     this.startingHandSize = startingHandSize;
