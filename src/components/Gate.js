@@ -12,4 +12,19 @@ export default class Gate {
     this.varient = null;
     this.flipped = false;
   }
+
+  to_cQASM(qubitIndex) {
+    switch(this.gateType) {
+      case "hadamard":
+        return `H q[${qubitIndex}]`
+      case "pauli-x":
+        return `X q[${qubitIndex}]`
+      case "pauli-y":
+        return `Y q[${qubitIndex}]`
+      case "pauli-z":
+        return `Z q[${qubitIndex}]`
+      case "measure":
+        return `MEASURE_ALL`
+    }
+  }
 }

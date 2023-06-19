@@ -4,6 +4,7 @@
  */
 import Card from "./Card.js";
 import Circuit from "./Circuit.js";
+import { game } from "../main.js";
 export default class MeasurementCard extends Card {
   constructor(measurementData, api) {
     super({
@@ -20,9 +21,10 @@ export default class MeasurementCard extends Card {
    * @return {Object} result - The result of the measurement.
    */
   measureCircuit(circuit) {
-    console.log(circuit)
-    circuit.addMeassure()
-    circuit.render()
+    console.log(circuit);
+    circuit.addMeassure();
+    circuit.render();
+    game.measureCircuit = true;
     return true
     // return this.api.executeCircuit(circuit);
   }

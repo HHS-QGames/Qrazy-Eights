@@ -41,4 +41,22 @@ export default class Deck {
   drawCard() {
     return this.cards.pop();
   }
+
+  drawCards(amount, player, maxOneMeasure) {
+    var measureCount = 0;
+    for (let i = 0; i < amount; i++) {
+      var card = this.drawCard()
+      if(card instanceof MeasurementCard){
+        if(maxOneMeasure && (measureCount >= 1)){
+          this.addCard(card)
+          this.shuffle()
+          i--;
+          continue
+        } else{
+          measureCount += 1;
+        }
+      }
+      player.hand.addCard(card)
+    }
+  }
 }

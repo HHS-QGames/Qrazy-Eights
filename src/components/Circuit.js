@@ -95,12 +95,19 @@ export default class Circuit {
   }
 
   addMeassure() {
-    const slotnumber = this.currentSlotnumber
-    console.log("Slotnumber " + slotnumber)
-    this.qubits.forEach(qubit => {
-      qubit.addGate(new Gate("measure"), slotnumber)
-    })
+    const slotnumber = this.currentSlotnumber;
+    console.log("Slotnumber " + slotnumber);
+    this.qubits.forEach((qubit) => {
+      qubit.addGate(new Gate("measure"), slotnumber);
+    });
     this.currentSlotnumber = slotnumber + 1;
+  }
+
+  clear() {
+    this.qubits.forEach((qubit) => {
+      qubit.clear();
+    });
+    this.currentSlotnumber = 0;
   }
 
   /**
@@ -121,6 +128,27 @@ export default class Circuit {
       qubit.addEventListener("drop", drop.bind(this));
     }
     console.log("Circuit rendered:");
+  }
+
+  to_cQASM() {
+    const gates = Array.apply(null, Array(this.currentSlotnumber)).map(function () {})
+    // const gates = []
+    console.log("In cQASM:")
+    console.log(gates)
+    this.qubits.forEach(qubit => {
+      qubit.appliedGates.forEach(gate => {
+        console.log(gate)
+        gates[gate.slotnumber] = {"qubitIndex": qubit.index, "gate": gate}
+      });
+    });
+    var cQASM = `version 1.0\nqubits ${this.qubits.length}\n`
+    gates.forEach(gate => {
+      cQASM += `${gate.gate.to_cQASM(gate.qubitIndex)}\n`
+    })
+    console.log(gates)
+    console.log(cQASM)
+    console.log("Out cQASM")
+    return cQASM
   }
 }
 
