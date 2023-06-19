@@ -54,6 +54,7 @@ export default class Player {
       );
     } else if (card instanceof MeasurementCard) {
       result = card.measureCircuit(circuit);
+      console.log(`Result: ${result}`)
       if (result === "|1⟩") {
         // Simplified win condition: player wins if they measure the state |1⟩
         this.game.endGame(this);

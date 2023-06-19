@@ -94,6 +94,16 @@ export default class Circuit {
     }
   }
 
+  addMeassure() {
+    const slotnumber = this.currentSlotnumber
+    console.log("Slotnumber " + slotnumber)
+    this.qubits.forEach(qubit => {
+      qubit.addGate(new Gate("measure"), slotnumber)
+    })
+    this.currentSlotnumber = slotnumber + 1;
+    this.render();
+  }
+
   /**
    * Renders the quantum circuit.
    */

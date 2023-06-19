@@ -3,7 +3,7 @@
  * MeasurementCard is a class that represents a measurement card.
  */
 import Card from "./Card.js";
-
+import Circuit from "./Circuit.js";
 export default class MeasurementCard extends Card {
   constructor(measurementData, api) {
     super({
@@ -20,7 +20,10 @@ export default class MeasurementCard extends Card {
    * @return {Object} result - The result of the measurement.
    */
   measureCircuit(circuit) {
-    return this.api.executeCircuit(circuit);
+    console.log(circuit)
+    circuit.addMeassure()
+    return true
+    // return this.api.executeCircuit(circuit);
   }
 
   getHTML() {
