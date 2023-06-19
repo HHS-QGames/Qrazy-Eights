@@ -22,6 +22,10 @@ export default class Player {
     }
   }
 
+  drawCards(amount, maxOneMeasure = false) {
+    this.game.drawPile.drawCards(amount, this, maxOneMeasure)
+  }
+
   /**
    * Plays a card from the player's hand.
    * @param {Number} cardIndex - The index of the card to play from the player's hand.

@@ -35,7 +35,9 @@ export default class Qubit {
     console.log("Gate not found")
     return false
   }
-
+  clear() {
+    this.appliedGates = []
+  }
   lowerSlotnumber(fromSlotnumber) {
     this.appliedGates.forEach(gate => {
       if(gate.slotnumber >= fromSlotnumber)
