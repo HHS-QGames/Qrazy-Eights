@@ -13,14 +13,6 @@ import { main } from "./main.js";
 import { execute } from "./util/QuantumAPI.js";
 
 export default class Game {
-  // constructor(players, circuit, drawPile, discardPile) {
-  //   this.players = players; // Players in the game
-  //   this.circuit = circuit; // Quantum circuit used in the game
-  //   this.drawPile = drawPile; // Deck of cards to draw from
-  //   this.discardPile = discardPile; // Pile of discarded cards
-  //   this.scoreboard = new Scoreboard(players)
-  //   this.currentPlayer = players[0];  // The first player goes first
-  // }
   constructor(players, gameSettings) {
     this.gameSettings = gameSettings;
 
@@ -47,19 +39,37 @@ export default class Game {
     );
     this.drawPile.addCards(
       { cardType: "gate", gateType: "pauli-x" },
-      gameSettings.xCountPP *
+      gameSettings.pauli_xCountPP *
         this.players.length *
         gameSettings.totalCardMultiplier
     );
     this.drawPile.addCards(
       { cardType: "gate", gateType: "pauli-y" },
-      gameSettings.yCountPP *
+      gameSettings.pauli_yCountPP *
         this.players.length *
         gameSettings.totalCardMultiplier
     );
     this.drawPile.addCards(
       { cardType: "gate", gateType: "pauli-z" },
-      gameSettings.zCountPP *
+      gameSettings.pauli_zCountPP *
+        this.players.length *
+        gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "prep-x" },
+      gameSettings.prep_xCountPP *
+        this.players.length *
+        gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "prep-y" },
+      gameSettings.prep_yCountPP *
+        this.players.length *
+        gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "prep-z" },
+      gameSettings.prep_zCountPP *
         this.players.length *
         gameSettings.totalCardMultiplier
     );
@@ -78,21 +88,42 @@ export default class Game {
     );
     this.drawPile.addCards(
       { cardType: "destroy", gateType: "pauli-x" },
-      gameSettings.xCountPP *
+      gameSettings.pauli_xCountPP *
         this.players.length *
         gameSettings.destroyPerGateCount *
         gameSettings.totalCardMultiplier
     );
     this.drawPile.addCards(
       { cardType: "destroy", gateType: "pauli-y" },
-      gameSettings.yCountPP *
+      gameSettings.pauli_yCountPP *
         this.players.length *
         gameSettings.destroyPerGateCount *
         gameSettings.totalCardMultiplier
     );
     this.drawPile.addCards(
       { cardType: "destroy", gateType: "pauli-z" },
-      gameSettings.zCountPP *
+      gameSettings.pauli_zCountPP *
+        this.players.length *
+        gameSettings.destroyPerGateCount *
+        gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "prep-x" },
+      gameSettings.prep_xCountPP *
+        this.players.length *
+        gameSettings.destroyPerGateCount *
+        gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "prep-y" },
+      gameSettings.prep_yCountPP *
+        this.players.length *
+        gameSettings.destroyPerGateCount *
+        gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "prep-z" },
+      gameSettings.prep_zCountPP *
         this.players.length *
         gameSettings.destroyPerGateCount *
         gameSettings.totalCardMultiplier
@@ -138,7 +169,7 @@ export default class Game {
       const results = await execute(this.circuit.to_cQASM());
       const measurementValue = this.findMostFrequentNumber(results); // Binary value of the qubits 0 1 0 0
       var binaryResult = measurementValue.toString(2)
-      while (binaryResult.length < 4) {
+      while (binaryResult.length < this.circuit.qubits.length) {
         binaryResult = "0" + binaryResult;
       }
       console.log(measurementValue);
