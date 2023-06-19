@@ -24,6 +24,6 @@ export default class MeasurementCard extends Card {
   }
 
   getHTML() {
-    return '<div class="card measure" draggable="true" ondragstart="drag(event)"><div class="card-title">Measure</div><img src="assets/measure.png" class="card-symbol" /><div class="card-description">End Round</div></div>'
+    return '<div class="card measure" draggable="true" ><div class="card-title">Measure</div><img src="assets/measure.png" class="card-symbol" /><div class="card-description">End Round</div></div>'
   }
 }

@@ -24,6 +24,6 @@ export default class QuantumDestroyOperationCard extends Card {
     circuit.applyGate(gate, qubits);
   }
   getHTML() {
-    return `<div class="card destroy" draggable="true" ondragstart="drag(event)"><div class="card-title">Gate</div><img src="${this.cardData.gateIconPath}" class="card-symbol" /><div class="card-description">${this.cardData.gateType}</div></div>`
+    return `<div class="card destroy" draggable="true"><div class="card-title">Gate</div><img src="${this.cardData.gateIconPath}" class="card-symbol" /><div class="card-description">${this.cardData.gateType}</div></div>`
   }
 }

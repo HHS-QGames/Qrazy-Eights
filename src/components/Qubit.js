@@ -23,6 +23,25 @@ export default class Qubit {
     this.appliedGates.push(gate);
   }
 
+  removeGate(gateType, slotnumber) {
+    for (let i = 0; i < this.appliedGates.length; i++) {
+      const gate = this.appliedGates[i];
+      if((gate.slotnumber==slotnumber) && (gate.gateType == gateType)){
+        this.appliedGates.splice(i, 1)
+        console.log("Gate removed")
+        return true
+      }
+    }
+    console.log("Gate not found")
+    return false
+  }
+
+  lowerSlotnumber(fromSlotnumber) {
+    this.appliedGates.forEach(gate => {
+      if(gate.slotnumber >= fromSlotnumber)
+        gate.slotnumber = gate.slotnumber - 1
+    });
+  }
   /**
    * Generates the HTML representation of the qubit.
    * @param {number} offset - The offset for gate positioning.
@@ -38,7 +57,7 @@ export default class Qubit {
         case "pauli-y":
         case "pauli-z":
         case "measure":
-          gatesHTML += `<image class="image" xlink:href="${getGateIconPath(gate.gateType)}" x="${offset + (distance * gate.slotnumber)}" y="-12" width="2" height="25" />`;
+          gatesHTML += `<image class="image" slotnumber="${gate.slotnumber}" gateType="${gate.gateType}" xlink:href="${getGateIconPath(gate.gateType)}" x="${offset + (distance * gate.slotnumber)}" y="-12" width="2" height="25" />`;
           break;
         case "cnot":
           switch (gate.varient) {

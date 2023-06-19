@@ -36,6 +36,6 @@ export default class QuantumOperationCard extends Card {
    * @returns {string} The HTML code for the card.
    */
   getHTML() {
-    return `<div class="card gate" draggable="true" ondragstart="drag(event)"><div class="card-title">Gate</div><img src="${this.cardData.gateIconPath}" class="card-symbol" /><div class="card-description">${this.cardData.gateType}</div></div>`;
+    return `<div class="card gate" draggable="true" ><div class="card-title">Gate</div><img src="${this.cardData.gateIconPath}" class="card-symbol" /><div class="card-description">${this.cardData.gateType}</div></div>`;
   }
 }

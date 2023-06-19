@@ -16,35 +16,6 @@
     <script type="module" src="src\components\Circuit.js"></script>
     <script type="module" src="src\components\Gate.js"></script>
     <script type="module" src="src\util\AssetFinder.js"></script>
-    <script>
-      function drag(ev) {
-        cardType = ev.target.classList[1]
-        console.log("Picked up card")
-        console.log("Card Type: "+cardType)
-        ev.dataTransfer.setData("cardType", cardType)
-        if(cardType !== "measure") {
-          gateType = ev.target.children[2].innerText
-          console.log("Gate Type: "+gateType)
-          ev.dataTransfer.setData("gateType", gateType)
-        }
-      }
-      function allowDrop(ev) {
-        ev.preventDefault();
-      }
-      function drop(ev) {
-        ev.preventDefault();
-        var cardType = ev.dataTransfer.getData("cardType");
-        if (cardType === "measure") {
-          console.log("Measurement Card Dropped. Measuring circuit after turn")
-        } else {
-          qubitNumber = ev.target.id
-          gateType = ev.dataTransfer.getData("gateType")
-          console.log(cardType + " " + gateType + " dropped on " + qubitNumber)
-        }
-      }
-
-
-    </script>
     <script type="module">
       import Hand from "./src/components/Hand.js"
       import QuantumOperationCard from "./src/components/QuantumOperationCard.js"
@@ -76,23 +47,39 @@
         new Qubit(2),
         new Qubit(3),
       ]
-      var circuit = new Circuit(qubits)
-      console.log(circuit)
-      circuit.applyGate(new Gate("hadamard"), 0, 1)
-      circuit.applyGate(new Gate("pauli-x"), 1, 0)
-      circuit.applyGate(new Gate("pauli-y"), 2, 2)
-      circuit.applyGate(new Gate("pauli-z"), 3, 3)
-      circuit.applyGate(new Gate("hadamard"), 4, 2)
-      circuit.applyGate(new Gate("measure"), 5, 0)
-      circuit.applyGate(new Gate("measure"), 5, 1)
-      circuit.applyGate(new Gate("measure"), 5, 2)
-      circuit.applyGate(new Gate("measure"), 5, 3)
-      circuit.applyCNOT(1, 3, 7)
-      circuit.applyCNOT(1, 2, 8)
-      circuit.applyCNOT(3, 1, 9)
-      circuit.applyCNOT(3, 0, 10)
-      console.log(circuit)
+      const circuit = new Circuit(qubits)
       circuit.render()
+      // circuit.applyGate(new Gate("hadamard"), 0, 1)
+      // circuit.applyGate(new Gate("pauli-x"), 1, 0)
+      // circuit.applyGate(new Gate("pauli-y"), 2, 2)
+      // circuit.applyGate(new Gate("pauli-z"), 3, 3)
+      // circuit.applyGate(new Gate("hadamard"), 4, 2)
+      // circuit.applyGate(new Gate("measure"), 5, 0)
+      // circuit.applyGate(new Gate("measure"), 5, 1)
+      // circuit.applyGate(new Gate("measure"), 5, 2)
+      // circuit.applyGate(new Gate("measure"), 5, 3)
+      // circuit.applyCNOT(1, 3, 7)
+      // circuit.applyCNOT(1, 2, 8)
+      // circuit.applyCNOT(3, 1, 9)
+      // circuit.applyCNOT(3, 0, 10)
+      // circuit.render()
+      // function allowDrop(ev) {
+      //   ev.preventDefault();
+      // }
+      // function drop(ev) {
+      //   ev.preventDefault();
+      //   var cardType = ev.dataTransfer.getData("cardType");
+      //   if (cardType === "measure") {
+      //     console.log("Measurement Card Dropped. Measuring circuit after turn")
+      //   } else {
+      //     qubitNumber = ev.target.id
+      //     gateType = ev.dataTransfer.getData("gateType")
+      //     console.log(cardType + " " + gateType + " dropped on " + qubitNumber)
+      //   }
+      // }
+    </script>
+    <script>
+
     </script>
   </head>
   <body>
