@@ -8,7 +8,7 @@ export default class MeasurementCard extends Card {
   constructor(measurementData, api) {
     super({
       type: "measurement",
-      gateIconPath: 'assets\\measure.png'
+      gateIconPath: "assets\\measure.png",
     }); // Initialize with parent class constructor
     this.measurementData = measurementData; // Data for the measurement
     this.api = api; // Quantum computer API for measurement
@@ -24,6 +24,6 @@ export default class MeasurementCard extends Card {
   }
 
   getHTML() {
-    return '<div class="card measure" draggable="true" ><div class="card-title">Measure</div><img src="assets/measure.png" class="card-symbol" /><div class="card-description">End Round</div></div>'
+    return '<div class="card measure" draggable="true" ><div class="card-title">Measure</div><img src="assets/measure.png" class="card-symbol" /><div class="card-description">End Round</div></div>';
   }
 }

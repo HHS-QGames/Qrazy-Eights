@@ -2,6 +2,7 @@
  * Circuit is a class that represents a quantum circuit.
  */
 import Gate from "./Gate.js";
+import { game } from "../main.js";
 
 const DISTANCE = 3;
 const OFFSET = 0.5;
@@ -22,33 +23,37 @@ export default class Circuit {
    * @param {number} slotnumber - The slot number for the gate.
    * @param {number} qubitIndex - The index of the target qubit.
    */
-  applyGate(gate, slotnumber=this.currentSlotnumber, qubitIndex) {
-    console.log(`Apply ${gate.gateType} on qubit ${qubitIndex} in slotnumber ${slotnumber}`)
-    this.qubits.forEach(qubit => {
-      if (qubit.index === qubitIndex) {
-        console.log("Qubit found")
-        qubit.addGate(gate, slotnumber);
-        this.currentSlotnumber = slotnumber + 1;
-      }
-    });
-    this.render()
+  applyGate(gate, qubitIndex, slotnumber = this.currentSlotnumber) {
+    console.log(
+      `Apply ${gate.gateType} on qubit ${qubitIndex} in slotnumber ${slotnumber}`
+    );
+    if (qubitIndex < this.qubits.length && qubitIndex >= 0) {
+      const qubit = this.qubits[qubitIndex];
+      qubit.addGate(gate, slotnumber);
+      this.currentSlotnumber = slotnumber + 1;
+      this.render();
+      return true;
+    }
+    return false;
   }
 
   destroyGate(gateType, qubitIndex, slotnumber) {
-    if((qubitIndex < this.qubits.length) && (qubitIndex >= 0)){
-      const qubit = this.qubits[qubitIndex]
-      const gateIsRemoved = qubit.removeGate(gateType, slotnumber)
-      if(gateIsRemoved) {
-        this.lowerSlotnumbers(slotnumber)
-        this.currentSlotnumber -= 1
+    var gateIsRemoved = false;
+    if (qubitIndex < this.qubits.length && qubitIndex >= 0) {
+      const qubit = this.qubits[qubitIndex];
+      gateIsRemoved = qubit.removeGate(gateType, slotnumber);
+      if (gateIsRemoved) {
+        this.lowerSlotnumbers(slotnumber);
+        this.currentSlotnumber -= 1;
+        this.render();
       }
-      this.render()
     }
+    return gateIsRemoved;
   }
 
   lowerSlotnumbers(fromSlotnumber) {
-    this.qubits.forEach(qubit => {
-      qubit.lowerSlotnumber(fromSlotnumber)
+    this.qubits.forEach((qubit) => {
+      qubit.lowerSlotnumber(fromSlotnumber);
     });
   }
 
@@ -65,7 +70,7 @@ export default class Circuit {
     if (controlQubitIndex > notQubitIndex) {
       controlGate.flipped = true;
     }
-    this.applyGate(controlGate, slotnumber, controlQubitIndex);
+    this.applyGate(controlGate, controlQubitIndex, slotnumber);
 
     // Set the not
     var notGate = new Gate("cnot");
@@ -73,16 +78,18 @@ export default class Circuit {
     if (controlQubitIndex > notQubitIndex) {
       notGate.flipped = true;
     }
-    this.applyGate(notGate, slotnumber, notQubitIndex);
+    this.applyGate(notGate, notQubitIndex, slotnumber);
 
     // Render the middle connection parts
     if (Math.abs(notQubitIndex - controlQubitIndex) > 1) {
-      var lowValue = controlQubitIndex < notQubitIndex ? controlQubitIndex : notQubitIndex;
-      var highValue = controlQubitIndex > notQubitIndex ? controlQubitIndex : notQubitIndex;
+      var lowValue =
+        controlQubitIndex < notQubitIndex ? controlQubitIndex : notQubitIndex;
+      var highValue =
+        controlQubitIndex > notQubitIndex ? controlQubitIndex : notQubitIndex;
       for (var i = lowValue + 1; i < highValue; i++) {
         var middleGate = new Gate("cnot");
         middleGate.varient = "middle";
-        this.applyGate(middleGate, slotnumber, i);
+        this.applyGate(middleGate, i, slotnumber);
       }
     }
   }
@@ -91,10 +98,10 @@ export default class Circuit {
    * Renders the quantum circuit.
    */
   render() {
-    console.log("Start circuit render")
-    console.log(this)
+    console.log("Start circuit render");
+    console.log(this);
     var qubitsHTML = "";
-    this.qubits.forEach(qubit => {
+    this.qubits.forEach((qubit) => {
       qubitsHTML += qubit.getHTML(OFFSET, DISTANCE);
     });
     document.getElementById("circuit-container").innerHTML = qubitsHTML;
@@ -104,7 +111,7 @@ export default class Circuit {
       qubit.addEventListener("dragover", allowDrop);
       qubit.addEventListener("drop", drop.bind(this));
     }
-    console.log("Circuit rendered:")
+    console.log("Circuit rendered:");
   }
 }
 
@@ -113,27 +120,50 @@ function allowDrop(ev) {
 }
 function drop(ev) {
   ev.preventDefault();
+  var incorrectDrop = false;
   var cardType = ev.dataTransfer.getData("cardType");
-  if (cardType === "measure") {
-    console.log("Measurement Card Dropped. Measuring circuit after turn")
-  } else {
-    var qubitNumber = ev.target.id
-    if(qubitNumber[0] !== "q")
-      qubitNumber = ev.target.parentNode.id
-      if(qubitNumber[0] !== "q")
-        qubitNumber = ev.target.parentNode.parentNode.id
-    var gateType = ev.dataTransfer.getData("gateType")
-    if(cardType === "gate") {
-      this.applyGate(new Gate(gateType), this.currentSlotnumber, parseInt(qubitNumber[1]))
-    } else if(cardType === "destroy") {
-      console.log("In destroy")
-      if(ev.target.attributes.slotnumber !== undefined){
-        var targetSlotnumber = ev.target.attributes.slotnumber.value
-        console.log(`Target slotnumber ${targetSlotnumber}`)
-        this.destroyGate(gateType, parseInt(qubitNumber[1]), targetSlotnumber)
-      }else {
-        console.log("Incorrect destroy move")
-      }
+  var cardIndex = ev.dataTransfer.getData("cardIndex");
+  var qubitNumber = ev.target.id;
+  var targetSlotnumber = undefined;
+  if (qubitNumber[0] !== "q") qubitNumber = ev.target.parentNode.id;
+  if (qubitNumber[0] !== "q") qubitNumber = ev.target.parentNode.parentNode.id;
+  if (qubitNumber[0] !== "q") incorrectDrop = true;
+  if (cardType === "destroy") {
+    if (ev.target.attributes.slotnumber !== undefined) {
+      targetSlotnumber = ev.target.attributes.slotnumber.value;
+    } else {
+      incorrectDrop = true;
     }
   }
+
+  game.currentPlayer.playCard(
+    cardIndex,
+    this,
+    parseInt(qubitNumber[1]),
+    targetSlotnumber
+  );
+
+  // if (cardType === "measure") {
+  //   console.log("Measurement Card Dropped. Measuring circuit after turn")
+  // } else {
+  //   var qubitNumber = ev.target.id
+  //   if(qubitNumber[0] !== "q")
+  //     qubitNumber = ev.target.parentNode.id
+  //     if(qubitNumber[0] !== "q")
+  //       qubitNumber = ev.target.parentNode.parentNode.id
+  //   var gateType = ev.dataTransfer.getData("gateType")
+  //   if(cardType === "gate") {
+  //     this.applyGate(new Gate(gateType), this.currentSlotnumber, parseInt(qubitNumber[1]))
+  //   } else if(cardType === "destroy") {
+  //     console.log("In destroy")
+  //     if(ev.target.attributes.slotnumber !== undefined){
+  //       var targetSlotnumber = ev.target.attributes.slotnumber.value
+  //       console.log(`Target slotnumber ${targetSlotnumber}`)
+  //       this.destroyGate(gateType, parseInt(qubitNumber[1]), targetSlotnumber)
+  //     }else {
+  //       console.log("Incorrect destroy move")
+  //       incorrectDrop = true
+  //     }
+  //   }
+  // }
 }

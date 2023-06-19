@@ -16,7 +16,21 @@
     <script type="module" src="src\components\Circuit.js"></script>
     <script type="module" src="src\components\Gate.js"></script>
     <script type="module" src="src\util\AssetFinder.js"></script>
+    <script type="module" src="src\main.js"></script>
     <script type="module">
+      import {main, game} from "./src/main.js"
+      main()
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const confirmTurnBtn = document.getElementById("confirm-turn-btn");
+
+        confirmTurnBtn.addEventListener("click", function() {
+          console.log(game)
+          game.nextTurn()
+        })
+      })
+    </script>
+    <!-- <script type="module">
       import Hand from "./src/components/Hand.js"
       import QuantumOperationCard from "./src/components/QuantumOperationCard.js"
       import QuantumDestroyOperationCard from "./src/components/QuantumDestroyOperationCard.js"
@@ -77,10 +91,7 @@
       //     console.log(cardType + " " + gateType + " dropped on " + qubitNumber)
       //   }
       // }
-    </script>
-    <script>
-
-    </script>
+    </script> -->
   </head>
   <body>
     <div class="game-screen-container">
@@ -172,7 +183,7 @@
           </div>
 
         </div>
-        <button>Confirm Turn</button>
+        <button id="confirm-turn-btn">Confirm Turn</button>
       </div>
 
       <div id="circuit-container">

@@ -2,7 +2,7 @@
 /**
  * Pile is a class that represents a pile of cards.
  */
-class Pile {
+export default class Pile {
   constructor(cards) {
     this.cards = cards; // Cards in the pile
   }

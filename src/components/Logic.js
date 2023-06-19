@@ -2,7 +2,7 @@
 /**
  * Logic is a class that provides methods for calculating probabilities and outcomes based on quantum mechanics.
  */
-class Logic {
+export default class Logic {
   constructor() {}
 
   /**

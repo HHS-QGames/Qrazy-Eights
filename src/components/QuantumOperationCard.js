@@ -5,20 +5,19 @@
  */
 import getGateIconPath from "../util/AssetFinder.js";
 import Card from "./Card.js";
+import Gate from "./Gate.js";
 
 export default class QuantumOperationCard extends Card {
   /**
    * Constructs a new QuantumOperationCard instance.
    * @param {string} gateType - The type of the gate.
-   * @param {Object} operationData - The data for the quantum operation.
    */
-  constructor(gateType, operationData) {    
+  constructor(gateType) {    
     super({
       type: "gate",
       gateType: gateType,
       gateIconPath: getGateIconPath(gateType)
     }); // Initialize with parent class constructor
-    this.operationData = operationData; // Data for the quantum operation
   }
 
   /**
@@ -26,10 +25,13 @@ export default class QuantumOperationCard extends Card {
    * @param {Object} circuit - The quantum circuit to apply the operation to.
    * @param {Array} qubits - The qubits to apply the operation to.
    */
-  // applyOperation(circuit, qubits) {
-  //   const gate = new Gate(this.operationData);
-  //   circuit.applyGate(gate, qubits);
-  // }
+  applyOperation(circuit, qubits, isDestroy = false) {
+    if (isDestroy) {
+      circuit.destroy
+    }
+    const gate = new Gate(gateType);
+    circuit.applyGate(gate, qubits);
+  }
 
   /**
    * Generates the HTML representation of the quantum operation card.

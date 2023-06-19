@@ -28,6 +28,7 @@ export default class Hand {
   render() {
     console.log("Render Hand")
     var cardsHTML = ""
+    console.log(this.cards)
     this.cards.forEach(card => {
       cardsHTML += card.getHTML()
     });
@@ -42,7 +43,10 @@ export default class Hand {
 }
 function drag(ev) {
   var cardType = ev.target.classList[1]
+  var cardIndex = Array.from(ev.target.parentElement.children).findIndex((element)=>element === ev.target)
+
   ev.dataTransfer.setData("cardType", cardType)
+  ev.dataTransfer.setData("cardIndex", cardIndex)
   if(cardType !== "measure") {
     var gateType = ev.target.children[2].innerText
     ev.dataTransfer.setData("gateType", gateType)

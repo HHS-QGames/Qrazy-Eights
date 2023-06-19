@@ -21,7 +21,7 @@
  * Make sure to replace 'YOUR_EMAIL' and 'YOUR_PASSWORD' with your actual email and password.
  *
  */
-class QuantumComputerAPI {
+export default class QuantumComputerAPI {
   constructor(email, password) {
     this.email = email;
     this.password = password;

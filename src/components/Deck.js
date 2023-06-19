@@ -2,7 +2,7 @@
 /**
  * Deck is a class that represents a deck of cards.
  */
-class Deck {
+export default class Deck {
   constructor(cards) {
     this.cards = cards; // Cards in the deck
   }

@@ -2,7 +2,11 @@
 /**
  * Game is a class that represents the game, which includes players, the quantum circuit, and card piles.
  */
-class Game {
+import Circuit from "./components/Circuit.js";
+import Player from "./components/Player.js";
+import Pile from "./components/Pile.js";
+
+export default class Game {
   constructor(players, circuit, drawPile, discardPile) {
     this.players = players; // Players in the game
     this.circuit = circuit; // Quantum circuit used in the game
@@ -22,6 +26,7 @@ class Game {
         player.hand.addCard(card);
       }
     });
+    this.forceRender()
   }
 
   /**
@@ -34,7 +39,8 @@ class Game {
 
     const currentPlayerIndex = this.players.indexOf(this.currentPlayer);
     this.currentPlayer = this.players[(currentPlayerIndex + 1) % this.players.length];
-    this.currentPlayer.drawCard(); // Player draws a card at the start of their turn
+    console.log(`Current turn player ${(currentPlayerIndex + 2) % this.players.length}: ${this.currentPlayer.name}`)
+    this.forceRender()
   }
 
   /**
@@ -52,5 +58,10 @@ class Game {
   endGame(winner) {
     this.winner = winner;
     console.log(`${winner.name} is the winner!`);
+  }
+
+  forceRender() {
+    this.circuit.render()
+    this.currentPlayer.hand.render()
   }
 }

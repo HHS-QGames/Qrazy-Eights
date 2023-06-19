@@ -2,14 +2,14 @@
 /**
  * QuantumOperationCard is a class that represents a quantum operation card.
  */
-import getGateIconPath from "../util/AssetFinder.js"
+import getGateIconPath from "../util/AssetFinder.js";
 import Card from "./Card.js";
 export default class QuantumDestroyOperationCard extends Card {
   constructor(gateType, operationData) {
     super({
       type: "destroy",
       gateType: gateType,
-      gateIconPath: getGateIconPath(gateType)
+      gateIconPath: getGateIconPath(gateType),
     }); // Initialize with parent class constructor
     this.operationData = operationData; // Data for the quantum operation
   }
@@ -24,6 +24,6 @@ export default class QuantumDestroyOperationCard extends Card {
     circuit.applyGate(gate, qubits);
   }
   getHTML() {
-    return `<div class="card destroy" draggable="true"><div class="card-title">Gate</div><img src="${this.cardData.gateIconPath}" class="card-symbol" /><div class="card-description">${this.cardData.gateType}</div></div>`
+    return `<div class="card destroy" draggable="true"><div class="card-title">Destroy</div><img src="${this.cardData.gateIconPath}" class="card-symbol" /><div class="card-description">${this.cardData.gateType}</div></div>`;
   }
 }
