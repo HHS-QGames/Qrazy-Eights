@@ -56,8 +56,28 @@ export default class Player {
           } card!\n\nEach turn you are able to play a gate or destroy card and a single measure card at the end of your turn.`
         );
       } else {
-        if (card.gateType === "cnot") {
+        if (card.cardData.gateType === "cnot") {
           console.log("WIP: CNOT");
+          const controllQubit = parseInt(
+            prompt("Please enter the number of the controll qubit:")
+          );
+          const notQubit = parseInt(
+            prompt("Please enter the number of the not qubit:")
+          );
+          const qubitCount = this.game.circuit.qubits.length;
+          if (
+            controllQubit === notQubit ||
+            controllQubit >= qubitCount ||
+            controllQubit < 0 ||
+            notQubit >= qubitCount ||
+            notQubit < 0
+          ) {
+            succesfullAction = false
+            alert(`Incorrect values.\nPlease enter values between 0 and ${qubitCount-1}. Additionaly, the controll and not cannot have the same value.`)
+          }else{
+            this.game.circuit.applyCNOT(controllQubit, notQubit);
+            this.playedGate = true
+          }
         } else {
           succesfullAction = this.game.circuit.applyGate(
             new Gate(card.cardData.gateType),

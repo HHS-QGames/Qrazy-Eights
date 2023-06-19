@@ -63,7 +63,7 @@ export default class Circuit {
    * @param {number} notQubitIndex - The index of the target qubit.
    * @param {number} slotnumber - The slot number for the gate.
    */
-  applyCNOT(controlQubitIndex, notQubitIndex, slotnumber) {
+  applyCNOT(controlQubitIndex, notQubitIndex, slotnumber = this.currentSlotnumber) {
     // Set the control
     var controlGate = new Gate("cnot");
     controlGate.varient = "control";
@@ -138,7 +138,25 @@ export default class Circuit {
     this.qubits.forEach(qubit => {
       qubit.appliedGates.forEach(gate => {
         console.log(gate)
-        gates[gate.slotnumber] = {"qubitIndex": qubit.index, "gate": gate}
+        if(gate.gateType != "cnot")
+          gates[gate.slotnumber] = {"qubitIndex": qubit.index, "gate": gate}
+        else{
+          if(gates[gate.slotnumber] !== undefined) {
+            console.log("Yes i come here as "+gate.varient)
+            if(gate.varient === "not")
+              gates[gate.slotnumber].gate[gate.varient] = qubit.index
+            else if(gate.varient === "control")
+              gates[gate.slotnumber].gate[gate.varient] = qubit.index
+
+          }else {
+            console.log("CNOTGate")
+            console.log(gate)
+            const cnotGate = new Gate("cnot", gate.slotnumber)
+            cnotGate[gate.varient] = qubit.index
+            gates[gate.slotnumber] = {"qubitIndex": qubit.index, "gate": cnotGate}
+
+          }
+        }
       });
     });
     var cQASM = `version 1.0\nqubits ${this.qubits.length}\n`

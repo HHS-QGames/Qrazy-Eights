@@ -20,18 +20,6 @@ export default class QuantumOperationCard extends Card {
     }); // Initialize with parent class constructor
   }
 
-  /**
-   * Applies the quantum operation to a given quantum circuit.
-   * @param {Object} circuit - The quantum circuit to apply the operation to.
-   * @param {Array} qubits - The qubits to apply the operation to.
-   */
-  applyOperation(circuit, qubits, isDestroy = false) {
-    if (isDestroy) {
-      circuit.destroy
-    }
-    const gate = new Gate(gateType);
-    circuit.applyGate(gate, qubits);
-  }
 
   /**
    * Generates the HTML representation of the quantum operation card.
