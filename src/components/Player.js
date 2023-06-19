@@ -9,6 +9,7 @@ export default class Player {
     this.name = name; // Player's name
     this.game = game; // Game the player is participating in
     this.hand = new Hand([]); // Player's hand of cards
+    this.isCurrentTurn = false
   }
 
   /**
@@ -53,19 +54,21 @@ export default class Player {
         targetSlotnumber
       );
     } else if (card instanceof MeasurementCard) {
-      result = card.measureCircuit(circuit);
-      console.log(`Result: ${result}`)
-      if (result === "|1⟩") {
-        // Simplified win condition: player wins if they measure the state |1⟩
-        this.game.endGame(this);
-      }
+      succesfullAction = card.measureCircuit(circuit);
     }
     if (succesfullAction) {
       console.log("Action is succesfull");
       this.hand.removeCard(card);
       this.game.discardPile.addCard(card);
       this.hand.render();
+      this.game.scoreboard.render()
     }
-    return result;
+  }
+
+  getHTML() {
+    return `<div class="player-info${this.isCurrentTurn ? " current-turn" : ""}">
+    <b>${this.name}</b><br>
+    ${this.hand.cards.length} Cards
+  </div>`
   }
 }

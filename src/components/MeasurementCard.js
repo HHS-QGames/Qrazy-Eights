@@ -22,6 +22,7 @@ export default class MeasurementCard extends Card {
   measureCircuit(circuit) {
     console.log(circuit)
     circuit.addMeassure()
+    circuit.render()
     return true
     // return this.api.executeCircuit(circuit);
   }

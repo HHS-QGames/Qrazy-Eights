@@ -40,7 +40,7 @@ body {
   text-align: center;
 }
 
-.player-info-container {
+#player-info-container {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
@@ -57,7 +57,7 @@ body {
   background-color: #d5e8d4;
   border: #82b366 solid 1px;
 }
-.restart-game-btn {
+#restart-game-btn {
   height: 100%;
 }
 .player-hand {

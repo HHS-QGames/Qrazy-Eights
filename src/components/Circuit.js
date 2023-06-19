@@ -101,7 +101,6 @@ export default class Circuit {
       qubit.addGate(new Gate("measure"), slotnumber)
     })
     this.currentSlotnumber = slotnumber + 1;
-    this.render();
   }
 
   /**

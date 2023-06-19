@@ -12,6 +12,7 @@ import Qubit from "./components/Qubit.js";
 import Circuit from "./components/Circuit.js";
 import Deck from "./components/Deck.js";
 import Pile from "./components/Pile.js";
+import GameSettings from "./components/GameSettings.js";
 
 export var game = undefined;
 export function main() {
@@ -22,75 +23,13 @@ export function main() {
     new Player("Bob"),
     new Player("Thomas"),
     new Player("Arthur"),
+    new Player("Avi"),
   ]
 
-  // Create cards and deck
-  const hadamardCount = 10;
-  const cnotCount = 6;
-  const xCount = 8;
-  const yCount = 8;
-  const zCount = 8;
-  const measureCount = 6;
-  
-  const cards = [];
-  
-  // Create and add 'hadamard' cards
-  for (let i = 0; i < hadamardCount; i++) {
-    cards.push(new QuantumOperationCard("hadamard"));
-    if(i%2 === 0)
-     cards.push(new QuantumDestroyOperationCard("hadamard"))
-  }
-  
-  // Create and add 'cnot' cards
-  for (let i = 0; i < cnotCount; i++) {
-    cards.push(new QuantumOperationCard("cnot"));
-    if(i%2 === 0)
-     cards.push(new QuantumDestroyOperationCard("cnot"))
-  }
-  
-  // Create and add 'pauli-x' cards
-  for (let i = 0; i < xCount; i++) {
-    cards.push(new QuantumOperationCard("pauli-x"));
-    if(i%2 === 0)
-     cards.push(new QuantumDestroyOperationCard("pauli-x"))
-  }
-  
-  // Create and add 'pauli-y' cards
-  for (let i = 0; i < yCount; i++) {
-    cards.push(new QuantumOperationCard("pauli-y"));
-    if(i%2 === 0)
-     cards.push(new QuantumDestroyOperationCard("pauli-y"))
-  }
-  
-  // Create and add 'pauli-z' cards
-  for (let i = 0; i < zCount; i++) {
-    cards.push(new QuantumOperationCard("pauli-z"));
-    if(i%2 === 0)
-     cards.push(new QuantumDestroyOperationCard("pauli-z"))
-  }
-  
-  // Create and add 'measurement' cards
-  for (let i = 0; i < measureCount; i++) {
-    cards.push(new MeasurementCard());
-  }
-  
-  console.log(cards);
-  
-  const deck = new Deck(cards);
+  // Create game
+  game = new Game(players, new GameSettings());
+  // game = new Game(players, circuit, deck, discardPile);
 
-  // Create discard pile
-  const discardPile = new Pile([]);
-
-  // Create quantum circuit
-  const qubits = [new Qubit(0), new Qubit(1), new Qubit(2), new Qubit(3)]; // fill in your own qubits
-  const circuit = new Circuit(qubits);
-
-  // Create game and connect players to it
-  game = new Game(players, circuit, deck, discardPile);
-
-  players.forEach(player => {
-    player.game = game
-  })
   
   console.log(game)
   // Start the game
