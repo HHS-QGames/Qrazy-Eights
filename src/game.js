@@ -11,16 +11,13 @@ import Qubit from "./components/Qubit.js";
 import Deck from "./components/Deck.js";
 import { main } from "./main.js";
 import { execute } from "./util/QuantumAPI.js";
+import { randomSeed } from "./random.js";
 
 export default class Game {
-  constructor(players, gameSettings) {
+  constructor(players, gameSettings, connection, moveSender) {
     this.gameSettings = gameSettings;
-
+    this.moveSender = moveSender;
     this.players = players;
-    this.players.forEach((player) => {
-      player.game = this;
-    });
-    this.currentPlayer = players[0]; // The first player goes first
 
     this.scoreboard = new Scoreboard(players);
 
@@ -28,121 +25,138 @@ export default class Game {
     for (let i = 0; i < gameSettings.qubitCount; i++) {
       qubits.push(new Qubit(i));
     }
-    this.circuit = new Circuit(qubits);
-
-    this.drawPile = new Deck([]);
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "hadamard" },
-      gameSettings.hadamardCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "pauli-x" },
-      gameSettings.pauli_xCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "pauli-y" },
-      gameSettings.pauli_yCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "pauli-z" },
-      gameSettings.pauli_zCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "prep-x" },
-      gameSettings.prep_xCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "prep-y" },
-      gameSettings.prep_yCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "prep-z" },
-      gameSettings.prep_zCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "gate", gateType: "cnot" },
-      gameSettings.hadamardCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "destroy", gateType: "hadamard" },
-      gameSettings.hadamardCountPP *
-        this.players.length *
-        gameSettings.destroyPerGateCount *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "destroy", gateType: "pauli-x" },
-      gameSettings.pauli_xCountPP *
-        this.players.length *
-        gameSettings.destroyPerGateCount *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "destroy", gateType: "pauli-y" },
-      gameSettings.pauli_yCountPP *
-        this.players.length *
-        gameSettings.destroyPerGateCount *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "destroy", gateType: "pauli-z" },
-      gameSettings.pauli_zCountPP *
-        this.players.length *
-        gameSettings.destroyPerGateCount *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "destroy", gateType: "prep-x" },
-      gameSettings.prep_xCountPP *
-        this.players.length *
-        gameSettings.destroyPerGateCount *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "destroy", gateType: "prep-y" },
-      gameSettings.prep_yCountPP *
-        this.players.length *
-        gameSettings.destroyPerGateCount *
-        gameSettings.totalCardMultiplier
-    );
-    this.drawPile.addCards(
-      { cardType: "destroy", gateType: "prep-z" },
-      gameSettings.prep_zCountPP *
-        this.players.length *
-        gameSettings.destroyPerGateCount *
-        gameSettings.totalCardMultiplier
-    );
-    // this.drawPile.addCards({cardType: "destroy", gateType: "cnot"}, gameSettings.hadamardCountPP * this.players.length * gameSettings.destroyPerGateCount * gameSettings.totalCardMultiplier)
-    this.drawPile.addCards(
-      { cardType: "measure", gateType: undefined },
-      gameSettings.measureCountPP *
-        this.players.length *
-        gameSettings.totalCardMultiplier
-    );
-
-    this.discardPile = new Pile([]);
-    this.measureCircuit = false;
+    this.circuit = new Circuit(qubits, connection, moveSender);
+  }
+  doMove(move) {
+    if (move["type"] === "nextPlayer")
+      this.nextTurnWithoutTrigger(move["outcome"]);
+    else
+      this.circuit.doMove(move);
   }
   /**
    * Starts the game, including shuffling the deck and dealing cards to players.
    */
   startGame() {
+    this.players.forEach((player) => {
+      player.game = this;
+    });
+    this.currentPlayer = this.players[0]; // The first player goes first
+
+    this.drawPile = new Deck([]);
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "hadamard" },
+      this.gameSettings.hadamardCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "pauli-x" },
+      this.gameSettings.pauli_xCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "pauli-y" },
+      this.gameSettings.pauli_yCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "pauli-z" },
+      this.gameSettings.pauli_zCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "prep-x" },
+      this.gameSettings.prep_xCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "prep-y" },
+      this.gameSettings.prep_yCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "prep-z" },
+      this.gameSettings.prep_zCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "gate", gateType: "cnot" },
+      this.gameSettings.hadamardCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "hadamard" },
+      this.gameSettings.hadamardCountPP *
+        this.players.length *
+        this.gameSettings.destroyPerGateCount *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "pauli-x" },
+      this.gameSettings.pauli_xCountPP *
+        this.players.length *
+        this.gameSettings.destroyPerGateCount *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "pauli-y" },
+      this.gameSettings.pauli_yCountPP *
+        this.players.length *
+        this.gameSettings.destroyPerGateCount *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "pauli-z" },
+      this.gameSettings.pauli_zCountPP *
+        this.players.length *
+        this.gameSettings.destroyPerGateCount *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "prep-x" },
+      this.gameSettings.prep_xCountPP *
+        this.players.length *
+        this.gameSettings.destroyPerGateCount *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "prep-y" },
+      this.gameSettings.prep_yCountPP *
+        this.players.length *
+        this.gameSettings.destroyPerGateCount *
+        this.gameSettings.totalCardMultiplier
+    );
+    this.drawPile.addCards(
+      { cardType: "destroy", gateType: "prep-z" },
+      this.gameSettings.prep_zCountPP *
+        this.players.length *
+        this.gameSettings.destroyPerGateCount *
+        this.gameSettings.totalCardMultiplier
+    );
+    // this.drawPile.addCards({cardType: "destroy", gateType: "cnot"}, this.gameSettings.hadamardCountPP * this.players.length * this.gameSettings.destroyPerGateCount * this.gameSettings.totalCardMultiplier)
+    this.drawPile.addCards(
+      { cardType: "measure", gateType: undefined },
+      this.gameSettings.measureCountPP *
+        this.players.length *
+        this.gameSettings.totalCardMultiplier
+    );
+
+    this.discardPile = new Pile([]);
+    this.measureCircuit = false;
+
+    this.players.forEach((player) => {
+      console.log("Player:");
+      console.log(player);
+      if (player.connection !== null) // me
+        player.connection.send(JSON.stringify({ type: "starting", seed: randomSeed, players: this.players.map(p => p.name) }));
+    });
     this.drawPile.shuffle();
     this.players.forEach((player) => {
       player.drawCards(this.gameSettings.startingHandSize, true);
@@ -155,6 +169,14 @@ export default class Game {
    * Advances the game to the next turn.
    */
   async nextTurn() {
+    outcome = this.nextTurnWithoutTrigger();
+    this.moveSender({
+      "type": "nextPlayer",
+      outcome
+    });
+  }
+  async nextTurnWithoutTrigger(outcome) {
+    let ret;
     console.log(this.circuit.to_cQASM())
     if (this.isGameOver()) {
       alert(`${this.currentPlayer.name} heeft gewonnen!`);
@@ -166,12 +188,16 @@ export default class Game {
       // console.log(this.circuit)
       // console.log(this.circuit.to_cQASM())
       // const measurementValue = Math.floor(Math.random() * 17); // Binary value of the qubits 0 1 0 0
-      const results = await execute(this.circuit.to_cQASM());
-      const measurementValue = this.findMostFrequentNumber(results); // Binary value of the qubits 0 1 0 0
+      let measurementValue;
+      if (outcome) {
+        const results = await execute(this.circuit.to_cQASM());
+        measurementValue = this.findMostFrequentNumber(results); // Binary value of the qubits 0 1 0 0  
+      } else measurementValue = outcome;
       var binaryResult = measurementValue.toString(2)
       while (binaryResult.length < this.circuit.qubits.length) {
         binaryResult = "0" + binaryResult;
       }
+      ret = measurementValue;
       console.log(measurementValue);
       alert(
         `The result of the measurement is ${measurementValue}! (binary: ${binaryResult})\n${

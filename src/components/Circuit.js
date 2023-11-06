@@ -12,9 +12,11 @@ export default class Circuit {
    * Constructs a new Circuit instance.
    * @param {Array} qubits - The qubits in the circuit.
    */
-  constructor(qubits) {
+  constructor(qubits, connection, moveSender) {
     this.qubits = qubits;
     this.currentSlotnumber = 0;
+    this.connection = connection;
+    this.moveSender = moveSender;
   }
 
   /**
@@ -124,8 +126,8 @@ export default class Circuit {
     // Add event listeners
     const qubits = document.getElementsByClassName("qubit-row");
     for (const qubit of qubits) {
-      qubit.addEventListener("dragover", allowDrop);
-      qubit.addEventListener("drop", drop.bind(this));
+      qubit.addEventListener("dragover", this.allowDrop);
+      qubit.addEventListener("drop", this.drop.bind(this));
     }
     console.log("Circuit rendered:");
   }
@@ -168,57 +170,94 @@ export default class Circuit {
     console.log("Out cQASM")
     return cQASM
   }
-}
-
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-function drop(ev) {
-  ev.preventDefault();
-  var incorrectDrop = false;
-  var cardType = ev.dataTransfer.getData("cardType");
-  var cardIndex = ev.dataTransfer.getData("cardIndex");
-  var qubitNumber = ev.target.id;
-  var targetSlotnumber = undefined;
-  if (qubitNumber[0] !== "q") qubitNumber = ev.target.parentNode.id;
-  if (qubitNumber[0] !== "q") qubitNumber = ev.target.parentNode.parentNode.id;
-  if (qubitNumber[0] !== "q") incorrectDrop = true;
-  if (cardType === "destroy") {
-    if (ev.target.attributes.slotnumber !== undefined) {
-      targetSlotnumber = ev.target.attributes.slotnumber.value;
-    } else {
-      incorrectDrop = true;
-    }
+  doMove(move) {
+    const {cardType, cardIndex, targetSlotnumber, qubitNumber, val1, val2} = move;
+    this.dropWithoutTrigger({
+        preventDefault: () => {}, 
+        dataTransfer: {
+          getData: (t) => t === "cardType" ? cardType : cardIndex
+        },
+        target: {
+          attributes: { 
+            slotnumber: targetSlotnumber === undefined ? undefined : {value: targetSlotnumber}
+          }, 
+          id: qubitNumber, 
+          parentNode: { 
+            id: val1, 
+            parentNode: {
+              id: val2
+            }
+          }
+      }
+    });
   }
-
-  game.currentPlayer.playCard(
-    cardIndex,
-    this,
-    parseInt(qubitNumber[1]),
-    targetSlotnumber
-  );
-
-  // if (cardType === "measure") {
-  //   console.log("Measurement Card Dropped. Measuring circuit after turn")
-  // } else {
-  //   var qubitNumber = ev.target.id
-  //   if(qubitNumber[0] !== "q")
-  //     qubitNumber = ev.target.parentNode.id
-  //     if(qubitNumber[0] !== "q")
-  //       qubitNumber = ev.target.parentNode.parentNode.id
-  //   var gateType = ev.dataTransfer.getData("gateType")
-  //   if(cardType === "gate") {
-  //     this.applyGate(new Gate(gateType), this.currentSlotnumber, parseInt(qubitNumber[1]))
-  //   } else if(cardType === "destroy") {
-  //     console.log("In destroy")
-  //     if(ev.target.attributes.slotnumber !== undefined){
-  //       var targetSlotnumber = ev.target.attributes.slotnumber.value
-  //       console.log(`Target slotnumber ${targetSlotnumber}`)
-  //       this.destroyGate(gateType, parseInt(qubitNumber[1]), targetSlotnumber)
-  //     }else {
-  //       console.log("Incorrect destroy move")
-  //       incorrectDrop = true
-  //     }
-  //   }
-  // }
+  allowDrop(ev) {
+    ev.preventDefault();
+  }
+  
+  drop(ev) {
+    this.dropWithoutTrigger(ev);
+    this.moveSender({
+      cardType: ev.dataTransfer.getData("cardType"), 
+      cardIndex: ev.dataTransfer.getData("cardIndex"), 
+      targetSlotnumber: ev.target.attributes.slotnumber === undefined ? undefined : ev.target.attributes.slotnumber.value, 
+      qubitNumber: ev.target?.id, 
+      val1: ev.target?.parentNode?.id, 
+      val2: ev.target?.parentNode?.parentNode?.id,
+      programmed: ev.programmed
+    });
+  }
+  dropWithoutTrigger(ev) {
+    console.log("drop");
+    console.log(ev);
+    ev.preventDefault();
+    var incorrectDrop = false;
+    var cardType = ev.dataTransfer.getData("cardType");
+    var cardIndex = ev.dataTransfer.getData("cardIndex");
+    var qubitNumber = ev.target.id;
+    var targetSlotnumber = undefined;
+    if (qubitNumber[0] !== "q") qubitNumber = ev.target.parentNode.id;
+    if (qubitNumber[0] !== "q") qubitNumber = ev.target.parentNode.parentNode.id;
+    if (qubitNumber[0] !== "q") incorrectDrop = true;
+    if (cardType === "destroy") {
+      if (ev.target.attributes.slotnumber !== undefined) {
+        targetSlotnumber = ev.target.attributes.slotnumber.value;
+      } else {
+        incorrectDrop = true;
+      }
+    }
+    
+    ev.programmed = game.currentPlayer.playCard(
+      ev.programmed,
+      cardIndex,
+      this,
+      parseInt(qubitNumber[1]),
+      targetSlotnumber
+    );
+  
+    // if (cardType === "measure") {
+    //   console.log("Measurement Card Dropped. Measuring circuit after turn")
+    // } else {
+    //   var qubitNumber = ev.target.id
+    //   if(qubitNumber[0] !== "q")
+    //     qubitNumber = ev.target.parentNode.id
+    //     if(qubitNumber[0] !== "q")
+    //       qubitNumber = ev.target.parentNode.parentNode.id
+    //   var gateType = ev.dataTransfer.getData("gateType")
+    //   if(cardType === "gate") {
+    //     this.applyGate(new Gate(gateType), this.currentSlotnumber, parseInt(qubitNumber[1]))
+    //   } else if(cardType === "destroy") {
+    //     console.log("In destroy")
+    //     if(ev.target.attributes.slotnumber !== undefined){
+    //       var targetSlotnumber = ev.target.attributes.slotnumber.value
+    //       console.log(`Target slotnumber ${targetSlotnumber}`)
+    //       this.destroyGate(gateType, parseInt(qubitNumber[1]), targetSlotnumber)
+    //     }else {
+    //       console.log("Incorrect destroy move")
+    //       incorrectDrop = true
+    //     }
+    //   }
+    // }
+  }
+  
 }

@@ -1,5 +1,6 @@
 // Deck.js
 
+import { currentRandomMachine, randomMachine } from "../random.js";
 import Card from "./Card.js";
 import MeasurementCard from "./MeasurementCard.js";
 import QuantumDestroyOperationCard from "./QuantumDestroyOperationCard.js";
@@ -31,7 +32,7 @@ export default class Deck {
    * Shuffles the deck of cards.
    */
   shuffle() {
-    this.cards.sort(() => Math.random() - 0.5);
+    this.cards.sort(() => currentRandomMachine.get() - 0.5);
   }
 
   /**

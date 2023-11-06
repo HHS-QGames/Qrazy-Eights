@@ -1,0 +1,16 @@
+{
+  "name": "quantummaumau",
+  "version": "1.0.0",
+  "description": "\"Quantum Mau-Mau\" represents a captivating fusion of traditional card game strategies and quantum computing principles. Players embark on a unique journey, endeavoring to shed their hand of cards before any of their opponents, with an array of tools at their disposal.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

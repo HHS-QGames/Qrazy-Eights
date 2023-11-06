@@ -7,6 +7,9 @@
     <link rel="stylesheet" type="text/css" href="styles/main.css" />
 
     <title>Quantum Mau-Mau</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <script type="module" src="src\components\Card.js"></script>
     <script type="module" src="src\components\QuantumOperationCard.js"></script>
     <script
@@ -44,12 +47,15 @@
     </script>
   </head>
   <body>
-    <div class="game-screen-container">
+    <div id="game-screen" class="game-screen-container">
       <div id="draw-pile">
         <div class="card card-in-pile">
           <div>Draw Pile</div>
         </div>
       </div>
+      <div id="qrcode">
+      </div>
+      <button id="startButton">Start!</button>
       <div class="info-container">
         <div class="scoreboard">
           <b>Scoreboard</b>
@@ -63,6 +69,9 @@
       </div>
 
       <div id="circuit-container"></div>
+    </div>
+    <div id="waiting">
+      waiting for the game to start....
     </div>
   </body>
 </html>

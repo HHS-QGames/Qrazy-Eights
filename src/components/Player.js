@@ -5,8 +5,9 @@ import QuantumDestroyOperationCard from "./QuantumDestroyOperationCard.js";
 import MeasurementCard from "./MeasurementCard.js";
 import Gate from "./Gate.js";
 export default class Player {
-  constructor(name, game) {
+  constructor(name, connection, game) {
     this.name = name; // Player's name
+    this.connection = connection; // null means current player
     this.game = game; // Game the player is participating in
     this.hand = new Hand([]); // Player's hand of cards
     this.isCurrentTurn = false;
@@ -38,12 +39,14 @@ export default class Player {
    * @param {Number} qubitIndex - The qubits to apply the card to (if applicable).
    * @return {Object} result - The result of the card action (if applicable).
    */
-  playCard(cardIndex, circuit, qubitIndex, targetSlotnumber = undefined) {
+  playCard(programmed, cardIndex, circuit, qubitIndex, targetSlotnumber = undefined) {
     const card = this.hand.cards[cardIndex];
     console.log(card);
     if (!card) {
       throw new Error("Invalid card index");
     }
+
+    let a; let b;
 
     var succesfullAction = false;
     if (card instanceof QuantumOperationCard) {
@@ -61,10 +64,10 @@ export default class Player {
         if (card.cardData.gateType === "cnot") {
           console.log("WIP: CNOT");
           const controllQubit = parseInt(
-            prompt("Please enter the number of the controll qubit:")
+            programmed?.a ?? (a = prompt("Please enter the number of the controll qubit:"))
           );
           const notQubit = parseInt(
-            prompt("Please enter the number of the not qubit:")
+            programmed?.b ?? (b = prompt("Please enter the number of the not qubit:"))
           );
           const qubitCount = this.game.circuit.qubits.length;
           if (
@@ -124,6 +127,7 @@ export default class Player {
       this.hand.render();
       this.game.scoreboard.render();
     }
+    return { a, b };
   }
   giveTurn() {
     this.isCurrentTurn = true;

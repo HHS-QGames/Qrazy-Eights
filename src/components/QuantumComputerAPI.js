@@ -7,7 +7,7 @@
  * Usage:
  * Instantiate the QuantumComputerAPI class by passing your email and password:
  *
- *   const api = new QuantumComputerAPI('YOUR_EMAIL', 'YOUR_PASSWORD');
+ *   const  74 = new QuantumComputerAPI('YOUR_EMAIL', 'YOUR_PASSWORD');
  *
  * Call the executeCircuit method with your quantum circuit:
  *

@@ -39,7 +39,6 @@ export default class Hand {
       card.addEventListener("dragstart", drag);
     }
   }
-  
 }
 function drag(ev) {
   var cardType = ev.target.classList[1]
