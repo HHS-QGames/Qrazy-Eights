@@ -34,8 +34,7 @@ export function main() {
   if (opponent !== "") {
     document.getElementById("game-screen").style.display = "none";
     document.getElementById("waiting").style.display = "initial";
-    startButton.style.display = "none";
-    document.querySelector("#qrcode").style.display = "none";
+    document.getElementById("connection").style.display = "none";
 
     peer.on('open', () => {
       const conn = peer.connect(opponent);
@@ -49,6 +48,7 @@ export function main() {
             if (data["type"] === "starting") {
               document.getElementById("game-screen").style.display = "grid";
               document.getElementById("waiting").style.display = "none";
+              document.getElementById("connection").style.display = "none";
               currentRandomMachine.get = randomMachine(data["seed"]);
               players.push(...data["players"].map(name => new Player(name, name === name ? null : -1, undefined)));
               game.startGame();
@@ -60,8 +60,9 @@ export function main() {
   }); 
   } else {
     players.push(new Player(name, null));
-    document.getElementById("game-screen").style.display = "grid";
+    document.getElementById("game-screen").style.display = "none";
     document.getElementById("waiting").style.display = "none";
+    document.getElementById("connection").style.display = "initial";
 
     const url = new URL(nameUUID, new URL(window.location.href).origin).href;
     new QRCode(document.querySelector("#qrcode"), {
@@ -95,7 +96,8 @@ export function main() {
 }
 
 startButton.onclick = () => {
-  startButton.style.display = "none";
-  document.querySelector("#qrcode").style.display = "none";
+  document.getElementById("game-screen").style.display = "grid";
+  document.getElementById("waiting").style.display = "none";
+  document.getElementById("connection").style.display = "none";
   game.startGame();
 }
